@@ -38,10 +38,18 @@ public abstract class RSQLOperators {
             GREATER_THAN_OR_EQUAL = new ComparisonOperator("=ge=", ">=", Arity.nary(1)),
             LESS_THAN = new ComparisonOperator("=lt=", "<", Arity.nary(1)),
             LESS_THAN_OR_EQUAL = new ComparisonOperator("=le=", "<=", Arity.nary(1)),
-            IN = new ComparisonOperator("=in=", Arity.of(0, Integer.MAX_VALUE)),
-            NOT_IN = new ComparisonOperator("=out=", Arity.of(0, Integer.MAX_VALUE)),
+            /*IN = new ComparisonOperator("=in=", Arity.of(0, Integer.MAX_VALUE)),
+            NOT_IN = new ComparisonOperator("=out=", Arity.of(0, Integer.MAX_VALUE)),*/
             IS_NULL = new ComparisonOperator("=null=", Arity.nary(0)),
-            NOT_NULL = new ComparisonOperator("=notnull=", Arity.nary(0));
+            NOT_NULL = new ComparisonOperator("=notnull=", Arity.nary(0)),
+            /*EQUAL = new ComparisonOperator("=="),
+            NOT_EQUAL = new ComparisonOperator("!="),
+            GREATER_THAN = new ComparisonOperator("=gt=", ">"),
+            GREATER_THAN_OR_EQUAL = new ComparisonOperator("=ge=", ">="),
+            LESS_THAN = new ComparisonOperator("=lt=", "<"),
+            LESS_THAN_OR_EQUAL = new ComparisonOperator("=le=", "<="),*/
+            IN = new ComparisonOperator("=in=", ComparisonOperator.Type.MULTI_VALUED),
+            NOT_IN = new ComparisonOperator("=out=", ComparisonOperator.Type.MULTI_VALUED);
 
 
     public static Set<ComparisonOperator> defaultOperators() {

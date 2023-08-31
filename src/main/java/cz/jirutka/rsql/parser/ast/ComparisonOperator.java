@@ -37,7 +37,7 @@ public final class ComparisonOperator {
 
     private final String[] symbols;
 
-    private final Arity arity;
+    private final Type type;
 
     /**
      * @param symbols    Textual representation of this operator (e.g. <tt>=gt=</tt>); the first item
@@ -56,6 +56,35 @@ public final class ComparisonOperator {
     }
 
     /**
+     * @param symbols    Textual representation of this operator (e.g. <tt>=gt=</tt>); the first item
+     *                   is primary representation, any others are alternatives. Must match
+     *                   {@literal =[a-zA-Z]*=|[><]=?|!=}.
+     * @param type       Whether this operator may be used with single, multiple or nested arguments. This is
+     *                   then validated in {@link NodesFactory}.
+     * @throws IllegalArgumentException If the {@code symbols} is either <tt>null</tt>, empty,
+     *                                  or contain illegal symbols.
+     */
+    public ComparisonOperator(String[] symbols, Type type) {
+        Assert.notEmpty(symbols, "symbols must not be null or empty");
+        for (String sym : symbols) {
+            Assert.isTrue(isValidOperatorSymbol(sym), "symbol must match: %s", SYMBOL_PATTERN);
+        }
+        this.type = type;
+        this.symbols = symbols.clone();
+    }
+
+    /**
+     * @param symbol     Textual representation of this operator (e.g. <tt>=gt=</tt>); Must match
+     *                   {@literal =[a-zA-Z]*=|[><]=?|!=}.
+     * @param type       Whether this operator may be used with single, multiple or nested arguments. This
+     *                   is then validated in {@link NodesFactory}.
+     * @see #ComparisonOperator(String[], Type)
+     */
+    public ComparisonOperator(String symbol, Type type) {
+        this(new String[]{symbol}, type);
+    }
+
+    /**
      * @param symbols  Textual representation of this operator (e.g. <tt>=gt=</tt>); the first item is primary
      *                 representation, any others are alternatives. Must match {@literal =[a-zA-Z]*=|[><]=?|!=}.
      * @param arity    Arity of this operator.
@@ -70,7 +99,7 @@ public final class ComparisonOperator {
             Assert.isTrue(isValidOperatorSymbol(sym), "symbol must match: %s", SYMBOL_PATTERN);
         }
 
-        this.arity = arity;
+        this.type = new MultiValue(arity);
         this.symbols = symbols.clone();
     }
 
@@ -102,12 +131,11 @@ public final class ComparisonOperator {
      * @param symbol     Textual representation of this operator (e.g. <tt>=gt=</tt>); Must match
      *                   {@literal =[a-zA-Z]*=|[><]=?|!=}.
      * @param altSymbol  Alternative representation for {@code symbol}.
-     * @param multiValue Whether this operator may be used with multiple arguments. This is then
-     * @see #ComparisonOperator(String[], boolean)
-     * @deprecated in favor of {@linkplain #ComparisonOperator(String, String, Arity)}
+     * @param type       Whether this operator may be used with single, multiple or nested arguments.
+     * @see #ComparisonOperator(String[], Type)
      */
-    public ComparisonOperator(String symbol, String altSymbol, boolean multiValue) {
-        this(new String[]{symbol, altSymbol}, multiValue);
+    public ComparisonOperator(String symbol, String altSymbol, Type type) {
+        this(new String[]{symbol, altSymbol}, type);
     }
 
     /**
@@ -125,10 +153,10 @@ public final class ComparisonOperator {
     /**
      * @param symbols Textual representation of this operator (e.g. <tt>=gt=</tt>); the first item
      *                is primary representation, any others are alternatives. Must match {@literal =[a-zA-Z]*=|[><]=?|!=}.
-     * @see #ComparisonOperator(String[], boolean)
+     * @see #ComparisonOperator(String[], Type)
      */
     public ComparisonOperator(String... symbols) {
-        this(symbols, false);
+        this(symbols, Type.SINGLE_VALUED);
     }
 
 
@@ -159,7 +187,7 @@ public final class ComparisonOperator {
      */
     @Deprecated
     public boolean isMultiValue() {
-        return arity.max() > 1;
+        return type.isMultiValue();
     }
 
     /**
@@ -169,7 +197,11 @@ public final class ComparisonOperator {
      * @since 2.3.0
      */
     public Arity getArity() {
-        return arity;
+        return type.getArity();
+    }
+
+    public Type getType() {
+        return type;
     }
 
     /**
@@ -179,7 +211,6 @@ public final class ComparisonOperator {
     private boolean isValidOperatorSymbol(String str) {
         return !isBlank(str) && SYMBOL_PATTERN.matcher(str).matches();
     }
-
 
     @Override
     public String toString() {
@@ -199,4 +230,40 @@ public final class ComparisonOperator {
     public int hashCode() {
         return getSymbol().hashCode();
     }
+
+    public abstract static class Type {
+        public static final Type MULTI_VALUED = new MultiValue(Arity.of(1, Integer.MAX_VALUE));
+        public static final Type SINGLE_VALUED = new MultiValue(Arity.nary(1));
+        public static final Type NESTED = new Nested();
+
+        public abstract boolean isMultiValue();
+        public abstract Arity getArity();
+    }
+
+    public static class MultiValue extends Type {
+        private final Arity arity;
+
+        public MultiValue(Arity arity) {
+            this.arity = arity;
+        }
+
+        public Arity getArity() {
+            return arity;
+        }
+
+        public boolean isMultiValue() {
+            return getArity().max() > 1;
+        }
+    }
+
+    public static class Nested extends Type {
+        public boolean isMultiValue() {
+            return false;
+        }
+        public Arity getArity() {
+            return null;
+        }
+    }
+
+
 }

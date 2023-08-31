@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2013-2014 Jakub Jirutka <jakub@jirutka.cz>.
+ * Copyright 2023 Jens Borch Christiansen <jens.borch@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,29 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cz.jirutka.rsql.parser.ast
+package cz.jirutka.rsql.parser.ast;
 
-import spock.lang.Specification
-import spock.lang.Unroll
+import java.util.List;
 
-@Unroll
-class NoArgRSQLVisitorAdapterTest extends Specification {
-
-    def 'delegate visit(#className, Void) to visit(#className)'() {
-        setup:
-            def node = LogicalNode.isAssignableFrom(nodeClass) ?
-                    nodeClass.newInstance([]) :
-                    nodeClass.newInstance(RSQLOperators.EQUAL, 'sel', new StringArguments('arg'))
-        and:
-            def adapter = Spy(NoArgRSQLVisitorAdapter) {
-                visit(_) >> null
-            }
-        when:
-            adapter.visit(node, null)
-        then:
-            1 * adapter.visit({ nodeClass.isInstance(it) }) >> null
-        where:
-            nodeClass << [AndNode, OrNode, ComparisonNode]
-            className = nodeClass.simpleName
-    }
+/**
+ *
+ */
+public interface ComparisonArguments {
+    
+    boolean isNested();
+    
+    List<String> asStringList();
+    
+    Node asNode();    
 }

@@ -41,7 +41,7 @@ public final class ComparisonNode extends AbstractNode {
 
     private final String selector;
 
-    private final List<String> arguments;
+    private final ComparisonArguments arguments;
 
     /**
      * @param operator  Must not be <tt>null</tt>.
@@ -51,16 +51,18 @@ public final class ComparisonNode extends AbstractNode {
      *                  one argument.
      * @throws IllegalArgumentException If one of the conditions specified above it not met.
      */
-    public ComparisonNode(ComparisonOperator operator, String selector, List<String> arguments) {
-        this(operator, selector, new ArrayList<>(arguments), true);
-    }
-
-    ComparisonNode(ComparisonOperator operator, String selector, List<String> arguments,
-        @SuppressWarnings("unused") boolean trusted) {
+    public ComparisonNode(ComparisonOperator operator, String selector, ComparisonArguments arguments) {
         Assert.notNull(operator, "operator must not be null");
         Assert.notBlank(selector, "selector must not be blank");
         Assert.notNull(arguments, "arguments must not be null");
-        validate(operator, arguments.size());
+        validate(operator, arguments.asStringList().size());
+        if (operator.getType() == ComparisonOperator.Type.SINGLE_VALUED) {
+            Assert.isTrue(arguments.asStringList().size() == 1,
+                    "operator %s expects single argument, but multiple values given", operator);
+        } else if (operator.getType() == ComparisonOperator.Type.NESTED) {
+            Assert.isTrue(arguments instanceof NestedArguments,
+                "operator %s expects nested argument, but string value(s) was given", operator);
+        }
 
         this.operator = operator;
         this.selector = selector;
@@ -82,7 +84,7 @@ public final class ComparisonNode extends AbstractNode {
      * @return a copy of this node with the specified operator.
      */
     public ComparisonNode withOperator(ComparisonOperator newOperator) {
-        return new ComparisonNode(newOperator, selector, arguments, true);
+        return new ComparisonNode(newOperator, selector, arguments);
     }
 
     public String getSelector() {
@@ -98,18 +100,18 @@ public final class ComparisonNode extends AbstractNode {
     public ComparisonNode withSelector(String newSelector) {
         return selector.equals(newSelector)
         ? this
-        : new ComparisonNode(operator, newSelector, arguments, true);
+        : new ComparisonNode(operator, newSelector, arguments);
     }
 
     /**
-     * Returns a copy of the arguments list. It's guaranteed that it contains at least one item.
+     * Return arguments. It's guaranteed that string arguments contains at least one item.
      * When the operator is not {@link ComparisonOperator#isMultiValue() multiValue}, then it
      * contains exactly one argument.
      *
-     * @return a copy of the arguments list.
+     * @return the arguments.
      */
-    public List<String> getArguments() {
-        return new ArrayList<>(arguments);
+    public ComparisonArguments getArguments() {
+        return arguments;
     }
 
     /**
@@ -120,7 +122,7 @@ public final class ComparisonNode extends AbstractNode {
      *                     one argument.
      * @return a copy of this node with the specified arguments.
      */
-    public ComparisonNode withArguments(List<String> newArguments) {
+    public ComparisonNode withArguments(ComparisonArguments newArguments) {
         return new ComparisonNode(operator, selector, newArguments);
     }
 
@@ -145,18 +147,7 @@ public final class ComparisonNode extends AbstractNode {
 
     @Override
     public String toString() {
-        Arity arity = operator.getArity();
-
-        final String args;
-        if (arity.max() > 1) {
-            args = join(arguments, "','", "('", "')", "()");
-        } else if (!arguments.isEmpty()) {
-            args = "'" + arguments.get(0) + "'";
-        } else {
-            args = "";
-        }
-
-        return selector + operator + args;
+        return operator.getType() == ComparisonOperator.Type.SINGLE_VALUED ? selector + operator + arguments : selector + operator + "(" + arguments + ")";
     }
 
     @Override
