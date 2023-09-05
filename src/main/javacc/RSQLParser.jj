@@ -200,7 +200,21 @@ Object Arguments():
     final Object value;
 }
 {
-    ( <LPAREN> value = Or() <RPAREN> ) { return value; }
+    (
+        <LPAREN>
+        value = Or()
+        {
+        ((AbstractNode)value).incrementNestingLevel();
+        }
+        <RPAREN> 
+    ) 
+    {
+        ((AbstractNode)value).decrementNestingLevel();
+        if (((AbstractNode)value).getNestingLevel() > 10) {
+            throw new ParseException("Nesting level exceeded maximum limit of 10.");
+        } 
+        return value; 
+    }
     |
     ( <LPAREN> value = CommaSepArguments() <RPAREN> ) { return value; }
     |

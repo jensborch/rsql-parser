@@ -25,6 +25,8 @@ package cz.jirutka.rsql.parser.ast;
 
 public abstract class AbstractNode implements Node {
 
+    private int nestingLevel = 0;
+    
     /**
      * Accepts the visitor, calls its visit() method and returns the result.
      * This method just calls {@link #accept(RSQLVisitor, Object)} with
@@ -33,4 +35,17 @@ public abstract class AbstractNode implements Node {
     public <R, A> R accept(RSQLVisitor<R, A> visitor) {
         return accept(visitor, null);
     }
+    
+    public void incrementNestingLevel() {
+        nestingLevel++;
+    }
+    
+    public void decrementNestingLevel() {
+        nestingLevel--;
+    }
+
+    public int getNestingLevel() {
+        return nestingLevel;
+    }
+     
 }
