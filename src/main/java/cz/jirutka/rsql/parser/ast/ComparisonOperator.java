@@ -52,8 +52,33 @@ public final class ComparisonOperator {
      */
     @Deprecated
     public ComparisonOperator(String[] symbols, boolean multiValue) {
-        this(symbols, multiValue ? Arity.of(1, Integer.MAX_VALUE) : Arity.nary(1));
+        this(symbols, (Type) (multiValue ? Type.MULTI_VALUED : Type.SINGLE_VALUED));
     }
+
+    /**
+     * @param symbol     Textual representation of this operator (e.g. <tt>=gt=</tt>); Must match
+     *                   {@literal =[a-zA-Z]*=|[><]=?|!=}.
+     * @param multiValue Whether this operator may be used with multiple arguments. This is then
+     *                   validated in {@link NodesFactory}.
+     * @see #ComparisonOperator(String[], boolean)
+     * @deprecated in favor of {@linkplain #ComparisonOperator(String, Arity)}
+     */
+    @Deprecated
+    public ComparisonOperator(String symbol, boolean multiValue) {
+        this(new String[]{symbol}, multiValue);
+    }
+
+    /**
+     * @param symbol     Textual representation of this operator (e.g. <tt>=gt=</tt>); Must match
+     *                   {@literal =[a-zA-Z]*=|[><]=?|!=}.
+     * @param altSymbol  Alternative representation for {@code symbol}.
+     * @param multiValue Whether this operator may be used with multiple arguments. This is then
+     * @see #ComparisonOperator(String[], boolean)
+     */
+    public ComparisonOperator(String symbol, String altSymbol, boolean multiValue) {
+        this(new String[]{symbol, altSymbol}, multiValue);
+    }
+
 
     /**
      * @param symbols    Textual representation of this operator (e.g. <tt>=gt=</tt>); the first item
@@ -101,19 +126,6 @@ public final class ComparisonOperator {
 
         this.type = new MultiValue(arity);
         this.symbols = symbols.clone();
-    }
-
-    /**
-     * @param symbol     Textual representation of this operator (e.g. <tt>=gt=</tt>); Must match
-     *                   {@literal =[a-zA-Z]*=|[><]=?|!=}.
-     * @param multiValue Whether this operator may be used with multiple arguments. This is then
-     *                   validated in {@link NodesFactory}.
-     * @see #ComparisonOperator(String[], boolean)
-     * @deprecated in favor of {@linkplain #ComparisonOperator(String, Arity)}
-     */
-    @Deprecated
-    public ComparisonOperator(String symbol, boolean multiValue) {
-        this(new String[]{symbol}, multiValue);
     }
 
     /**

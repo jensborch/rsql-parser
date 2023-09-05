@@ -69,6 +69,10 @@ public final class ComparisonNode extends AbstractNode {
         this.arguments = arguments;
     }
 
+    public ComparisonNode(ComparisonOperator operator, String selector, List<String> arguments) {
+        this(operator, selector, new StringArguments(arguments));
+    }
+
     public <R, A> R accept(RSQLVisitor<R, A> visitor, A param) {
         return visitor.visit(this, param);
     }
@@ -110,8 +114,21 @@ public final class ComparisonNode extends AbstractNode {
      *
      * @return the arguments.
      */
-    public ComparisonArguments getArguments() {
+    public ComparisonArguments getArgumentsObject() {
         return arguments;
+    }
+
+    /**
+     * Returns a copy of the arguments list. It's guaranteed that it contains at least one item.
+     * When the operator is not {@link ComparisonOperator#isMultiValue() multiValue}, then it
+     * contains exactly one argument.
+     *
+     * @return a copy of the arguments list.
+     * @deprecated Use {@link #getArgumentsObject()}
+     */
+    @Deprecated
+    public List<String> getArguments() {
+        return new ArrayList<>(arguments.asStringList());
     }
 
     /**
@@ -123,6 +140,18 @@ public final class ComparisonNode extends AbstractNode {
      * @return a copy of this node with the specified arguments.
      */
     public ComparisonNode withArguments(ComparisonArguments newArguments) {
+        return new ComparisonNode(operator, selector, newArguments);
+    }
+
+    /**
+     * Returns a copy of this node with the specified arguments.
+     *
+     * @param newArguments Must not be <tt>null</tt> or empty. If the operator is not
+     *                     {@link ComparisonOperator#isMultiValue() multiValue}, then it must contain exactly
+     *                     one argument.
+     * @return a copy of this node with the specified arguments.
+     */
+    public ComparisonNode withArguments(List<String> newArguments) {
         return new ComparisonNode(operator, selector, newArguments);
     }
 
