@@ -88,7 +88,7 @@ publishing {
   }
 }
 
-/*signing {
+signing {
   isRequired = (version as String).endsWith("SNAPSHOT")
 
   val signingKey = findProperty("signingKey") as String?
@@ -96,7 +96,7 @@ publishing {
   useInMemoryPgpKeys(signingKey, signingPassword)
 
   sign(publishing.publications["java"])
-}*/
+}
 
 nexusPublishing {
   repositories {
