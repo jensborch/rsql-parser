@@ -212,6 +212,11 @@ public final class ComparisonOperator {
         return type.getArity();
     }
 
+    /**
+     * Returns the arguments type.
+     *
+     * @return arguments type
+     */
     public Type getType() {
         return type;
     }
@@ -243,6 +248,9 @@ public final class ComparisonOperator {
         return getSymbol().hashCode();
     }
 
+    /**
+     * Defines the different types of arguments.
+     */
     public abstract static class Type {
         public static final Type MULTI_VALUED = new MultiValue(Arity.of(1, Integer.MAX_VALUE));
         public static final Type SINGLE_VALUED = new MultiValue(Arity.nary(1));

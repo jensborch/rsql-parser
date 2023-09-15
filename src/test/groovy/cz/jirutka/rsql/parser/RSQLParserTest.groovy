@@ -336,3 +336,6 @@ class RSQLParserTest extends Specification {
     //def eq(sel, arg) { new ComparisonNode(EQUAL, sel, new StringArguments(arg)) }
     //def out(sel, ...args) { new ComparisonNode(NOT_IN, sel, new StringArguments(args)) }
 }
+    def eq(sel, arg) { new ComparisonNode(EQUAL, sel, new StringArguments(arg)) }
+    def out(sel, ...args) { new ComparisonNode(NOT_IN, sel, new StringArguments(args as List<String>)) }
+}
