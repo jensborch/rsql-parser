@@ -55,7 +55,7 @@ import java.util.Set;
  * comp-fiql      = ( ( "=", { ALPHA } ) | "!" ), "=";
  * comp-alt       = ( ">" | "<" ), [ "=" ];
  *
- * arguments      = ( "(", value, { "," , value }, ")" ) | value;
+ * arguments      = ( "(", value, { "," , value }, ")" ) | value | ( "(", comparison, { or, comparison }  ")" );
  * value          = unreserved-str | double-quoted | single-quoted;
  *
  * unreserved-str = unreserved, { unreserved }
@@ -114,7 +114,6 @@ public final class RSQLParser {
         try (Reader reader = new StringReader(query)) {
             Parser parser = new Parser(reader, nodesFactory);
             return parser.Input();
-
         } catch (Exception | TokenMgrError ex) {
             throw new RSQLParserException(ex);
         }
