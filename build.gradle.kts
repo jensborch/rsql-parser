@@ -4,6 +4,7 @@ plugins {
   `java-library`
   `maven-publish`
   signing
+  checkstyle
   id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
   id("ca.coglinc.javacc") version "2.4.0"
   id("net.researchgate.release") version "3.0.2"
