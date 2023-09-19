@@ -31,4 +31,9 @@ public class RSQLParserException extends RuntimeException {
     public RSQLParserException(Throwable cause) {
         super(cause);
     }
+
+    public RSQLParserException(String message) {
+        super(message);
+    }
+    
 }

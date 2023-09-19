@@ -47,8 +47,6 @@ import java.util.List;
 
 final class Parser {
 
-    final int MAX_NESTING_LEVEL = 10;
-
     private NodesFactory factory;
     private int nestingLevel = 0;
 
@@ -210,14 +208,15 @@ Object Arguments():
         {
         nestingLevel++;
         }
-        value = Or()        
+        value = Or()
+        {
+        ((Node)value).setNestingLevel(nestingLevel);
+        }
         <RPAREN> 
     ) 
     {
         nestingLevel--;
-        if (nestingLevel > MAX_NESTING_LEVEL) {
-            throw new ParseException("Nesting level of " + nestingLevel + " exceeded maximum limit of " + MAX_NESTING_LEVEL + ".");
-        } 
+        ((Node)value).setNestingLevel(nestingLevel);
         return value; 
     }
     |

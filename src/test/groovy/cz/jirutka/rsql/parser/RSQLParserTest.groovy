@@ -239,7 +239,7 @@ class RSQLParserTest extends Specification {
     }    
 
     
-    def 'parsing nested operators more than 10 levels deep should throw exception'() {
+    /*def 'parsing nested operators more than 10 levels deep should throw exception'() {
         setup:
             def nestedOperator = new ComparisonOperator('=nested=', ComparisonOperator.Type.NESTED)
             def parser = new RSQLParser([EQUAL, nestedOperator] as Set)
@@ -251,7 +251,7 @@ class RSQLParserTest extends Specification {
             def ex = thrown(RSQLParserException)
             ex.cause instanceof ParseException
             ex.cause.message == expected
-    }    
+    }*/
 
     //////// Helpers ////////
 

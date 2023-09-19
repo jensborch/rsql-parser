@@ -54,6 +54,7 @@ class ComparisonNodeTest extends Specification {
         expect:
         EqualsVerifier.forClass(ComparisonNode)
             .withNonnullFields('operator', 'selector', 'arguments')
+            .withIgnoredFields('nestingLevel')
             .verify()
     }
 }
