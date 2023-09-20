@@ -26,7 +26,7 @@ dependencies {
   javacc("net.java.dev.javacc:javacc:7.0.12")
 }
 
-group = "io.github.jensborch"
+group = "com.github.jensborchh"
 description = "RSQL-parser"
 
 java {
@@ -106,7 +106,7 @@ signing {
 nexusPublishing {
   repositories {
     sonatype {
-      val baseUri = uri("https://s01.oss.sonatype.org")
+      val baseUri = uri("https://oss.sonatype.org")
       nexusUrl.set(baseUri.resolve("/service/local/"))
       snapshotRepositoryUrl.set(baseUri.resolve("/content/repositories/snapshots/"))
     }
