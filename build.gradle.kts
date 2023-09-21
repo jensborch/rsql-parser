@@ -26,7 +26,7 @@ dependencies {
   javacc("net.java.dev.javacc:javacc:7.0.12")
 }
 
-group = "com.github.jensborchh"
+group = "com.github.jensborch"
 description = "RSQL-parser"
 
 java {
