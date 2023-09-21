@@ -236,22 +236,7 @@ class RSQLParserTest extends Specification {
 
         expect:
             parser.parse('genres=nested=(sci-fi==true)') == expected
-    }    
-
-    
-    /*def 'parsing nested operators more than 10 levels deep should throw exception'() {
-        setup:
-            def nestedOperator = new ComparisonOperator('=nested=', ComparisonOperator.Type.NESTED)
-            def parser = new RSQLParser([EQUAL, nestedOperator] as Set)
-            def expected = "Nesting level of 11 exceeded maximum limit of 10."
-
-        when:
-            parser.parse('l0=nested=(l1=nested=(l2=nested=(l3=nested=(l4=nested=(l5=nested=(l6=nested=(l7=nested=(l8=nested=(l9=nested=(l10=nested=(l0=nested=(test==true))))))))))))') == expected
-        then:
-            def ex = thrown(RSQLParserException)
-            ex.cause instanceof ParseException
-            ex.cause.message == expected
-    }*/
+    }
 
     //////// Helpers ////////
 
