@@ -2,7 +2,7 @@
 Jakub Jirutka <https://github.com/jirutka[@jirutka]>
 :name: rsql-parser
 :version: 2.2.0
-:mvn-group: io.github.jensborch
+:mvn-group: com.github.jensborch
 :gh-name: jensborch/{name}
 :gh-branch: master
 :src-base: link:src/main/java/cz/jirutka/rsql/parser
