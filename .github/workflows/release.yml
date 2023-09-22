@@ -6,6 +6,9 @@ on:
         description: 'The release version'
         required: true
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Release
@@ -19,10 +22,6 @@ jobs:
           java-version: 8
       - name: Build
         run: ./gradlew build
-      - name: Configure Git Author
-        run: |
-          git config user.name "GitHub Actions"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Release
         env:
           RELEASE_VERSION: ${{ github.event.inputs.version }}
@@ -30,4 +29,5 @@ jobs:
           ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.SONATYPE_PASSWORD }}
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew release -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=$RELEASE_VERSION
