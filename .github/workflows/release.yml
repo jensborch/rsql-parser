@@ -22,6 +22,10 @@ jobs:
           java-version: 8
       - name: Build
         run: ./gradlew build
+      - name: Configure Git Author
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Release
         env:
           RELEASE_VERSION: ${{ github.event.inputs.version }}
