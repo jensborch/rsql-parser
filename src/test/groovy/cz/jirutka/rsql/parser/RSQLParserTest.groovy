@@ -236,8 +236,7 @@ class RSQLParserTest extends Specification {
 
         expect:
             parser.parse('genres=nested=(sci-fi==true)') == expected
-    }    
-
+    }
 
     //////// Helpers ////////
 

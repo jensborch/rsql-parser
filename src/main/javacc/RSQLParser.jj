@@ -48,6 +48,7 @@ import java.util.List;
 final class Parser {
 
     private NodesFactory factory;
+    private int nestingLevel = 0;
 
     public Parser(Reader reader, NodesFactory factory) {
         this(reader);
@@ -202,7 +203,22 @@ Object Arguments():
     final Object value;
 }
 {
-    ( <LPAREN> value = Or() <RPAREN> ) { return value; }
+    (
+        <LPAREN>
+        {
+        nestingLevel++;
+        }
+        value = Or()
+        {
+        ((Node)value).setNestingLevel(nestingLevel);
+        }
+        <RPAREN> 
+    ) 
+    {
+        nestingLevel--;
+        ((Node)value).setNestingLevel(nestingLevel);
+        return value; 
+    }
     |
     ( <LPAREN> value = CommaSepArguments() <RPAREN> ) { return value; }
     |

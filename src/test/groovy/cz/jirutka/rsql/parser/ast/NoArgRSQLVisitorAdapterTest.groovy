@@ -23,6 +23,8 @@
  */
 package cz.jirutka.rsql.parser.ast
 
+import static cz.jirutka.rsql.parser.ast.RSQLOperators.EQUAL
+import cz.jirutka.rsql.parser.RSQLParser
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -46,4 +48,33 @@ class NoArgRSQLVisitorAdapterTest extends Specification {
             nodeClass << [AndNode, OrNode, ComparisonNode]
             className = nodeClass.simpleName
     }
+    
+    def 'using parser with custom nested operators should have corret nesting level'() {
+        setup:
+            def level = 0
+            def nestedOperator = new ComparisonOperator('=nested=', ComparisonOperator.Type.NESTED)
+            def adapter = new NoArgRSQLVisitorAdapter<Void>() {
+                
+                def Void visit(AndNode nodes) {
+                    nodes.stream().map(n -> n.accept(this))
+                }
+                
+                def Void visit(OrNode nodes) {
+                    nodes.stream().map(n -> n.accept(this))
+                }
+
+                def Void visit(ComparisonNode node) {
+                    def args = node.getArgumentsObject()
+                    if (args instanceof NestedArguments) {
+                        level = args.asNode().nestingLevel
+                        args.asNode().accept(this)
+                    }
+                }
+            }
+            def parser = new RSQLParser([EQUAL, nestedOperator] as Set)
+        when:
+            parser.parse('f1=nested=(f2=nested=(test==true))').accept(adapter)
+        then:
+            level == 1
+    }           
 }
