@@ -63,6 +63,7 @@ abstract class LogicalNodeTest extends Specification {
         expect:
         EqualsVerifier.forClass(newNode([]).class as Class<Object>)
             .withNonnullFields('children', 'operator')
+            .withIgnoredFields('nestingLevel')
             .verify()
     }
 }
