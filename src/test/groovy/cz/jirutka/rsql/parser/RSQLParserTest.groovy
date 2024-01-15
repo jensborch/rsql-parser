@@ -47,6 +47,13 @@ class RSQLParserTest extends Specification {
             operators << [null, []]
     }
 
+    def 'throw exception when nodesFactory is null'() {
+        when:
+           new RSQLParser(null as NodesFactory)
+        then:
+            def e = thrown IllegalArgumentException
+            e.message == "nodesFactory must not be null"
+    }
 
     def 'throw exception when input is null'() {
         when:
@@ -81,7 +88,16 @@ class RSQLParserTest extends Specification {
                 'allons-y', 'l00k.dot.path', 'look/XML/path', 'n:look/n:xml', 'path.to::Ref', '$doll_r.way' ]
     }
 
-    def 'throw exception for selector with reserved char: #input'() {
+    def 'parse quoted selector with any chars: #input'() {
+        given:
+            def expected = eq(input[1..-2], 'val')
+        expect:
+            parse("${input}==val") == expected
+        where:
+            input << [ '"hi there!"', "'Pěkný den!'", '"Flynn\'s *"', '"o)\'O\'(o"', '"6*7=42"' ]
+    }
+
+    def 'throw exception for selector with unquoted reserved char: #input'() {
         when:
             parse("${input}==val")
         then:
@@ -240,7 +256,7 @@ class RSQLParserTest extends Specification {
 
     //////// Helpers ////////
 
-    def parse(String rsql) { new RSQLParser().parse(rsql) }
+    def parse(String rsql) { new RSQLParser(factory).parse(rsql) }
 
     def and(Node... nodes) { new AndNode(nodes as List) }
     def or(Node... nodes) { new OrNode(nodes as List) }

@@ -5,7 +5,7 @@ plugins {
   `maven-publish`
   signing
   id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
-  id("ca.coglinc.javacc") version "2.4.0"
+  id("org.javacc.javacc") version "3.0.0"
   id("net.researchgate.release") version "3.0.2"
 }
 
@@ -16,14 +16,14 @@ repositories {
 dependencies {
   compileOnly("net.jcip:jcip-annotations:1.0")
 
-  testImplementation("nl.jqno.equalsverifier:equalsverifier:3.14.3")
+  testImplementation("nl.jqno.equalsverifier:equalsverifier:3.15.3")
 
-  testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3")
+  testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
 
   testImplementation("org.spockframework:spock-core:2.4-M1-groovy-4.0")
 
-  javacc("net.java.dev.javacc:javacc:7.0.12")
+  javacc("net.java.dev.javacc:javacc:7.0.13")
 }
 
 group = "com.github.jensborch"
@@ -35,6 +35,12 @@ java {
 
   toolchain {
     languageVersion.set(JavaLanguageVersion.of(8))
+  }
+
+  sourceSets {
+    main {
+      java.srcDirs(project.layout.buildDirectory.dir("generated/javacc"))
+    }
   }
 }
 
@@ -153,6 +159,10 @@ tasks {
 
   compileJavacc {
     outputDirectory = outputDirectory.resolve("cz/jirutka/rsql/parser")
+  }
+
+  named("sourcesJar") {
+    dependsOn(compileJavacc)
   }
 
   named("afterReleaseBuild") {

@@ -2,10 +2,22 @@
 :repo-uri: https://github.com/jirutka/rsql-parser
 :issue-uri: {repo-uri}/issues
 
+
+== 2.3.0 (2024-01-15)
+* Synchronized fork with nstdio/rsql-parser version 2.2.1:
+** Update JavaCC to 7.0.13 version.
+** Allow quoted selectors with reserved characters. https://github.com/sdeming[@sdeming]
+** NodesFactory will throw exception if operator alternative symbols are overlapping.
+** More optimize for unescape and unquote by using bulk ops.
+** Overload RSQLParser constructor to accept NodesFactory.
+** Update JavaCC to 7.0.12 version.
+** Optimize unescape performance
+** Optimize memory footprint by using Reader as a Parser source
+** Change artifact Maven coordinates from `cz.jirutka.rsql:rsql-parser` to `io.github.nstdio:rsql-parser`
+
 == 2.2.0 (2024-09-15)
 
 * Added support for nested query arguments.
-
 
 == 2.1.0 (2014-02-07)
 
