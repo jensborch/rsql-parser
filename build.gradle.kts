@@ -6,7 +6,6 @@ plugins {
   signing
   id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
   id("org.javacc.javacc") version "3.0.0"
-  id("net.researchgate.release") version "3.0.2"
 }
 
 repositories {
@@ -102,8 +101,8 @@ publishing {
 signing {
   isRequired = (version as String).endsWith("SNAPSHOT")
 
-  val signingKey = findProperty("signingKey") as String?
-  val signingPassword = findProperty("signingPassword") as String?
+  val signingKey = findProperty("SIGNING_KEY") as String?
+  val signingPassword = findProperty("SIGNING_PASSWORD") as String?
   useInMemoryPgpKeys(signingKey, signingPassword)
 
   sign(publishing.publications["java"])
@@ -115,17 +114,13 @@ nexusPublishing {
       val baseUri = uri("https://oss.sonatype.org")
       nexusUrl.set(baseUri.resolve("/service/local/"))
       snapshotRepositoryUrl.set(baseUri.resolve("/content/repositories/snapshots/"))
+      username = findProperty("SONATYPE_USERNAME") as String?
+      password = findProperty("SONATYPE_PASSWORD") as String?
     }
   }
 }
 
-release {
-  tagTemplate.set("v\${version}")
-  git {
-    requireBranch.set("master")
-    pushToRemote.set("origin")
-  }
-}
+
 
 tasks {
   test {
@@ -164,8 +159,44 @@ tasks {
   named("sourcesJar") {
     dependsOn(compileJavacc)
   }
+}
 
-  named("afterReleaseBuild") {
-    dependsOn("publishToSonatype", "closeAndReleaseSonatypeStagingRepository")
+val newVersion: String? by project
+tasks.register("bumpVersion") {
+    this.doFirst {
+      bumpVersion("gradle.properties", "version=")
+      bumpVersion("README.adoc", "version: ")
+    }
+}
+
+tasks.register("toSnapshot") {
+    this.doFirst {
+      val file = file("gradle.properties")
+      val snapshot = version.toString().contains("-SNAPSHOT")
+      if (!snapshot) {
+        file.readText().apply {
+          println("Adding SNAPSHOT")
+          val content = this.replace("version=$version", "version=$version-SNAPSHOT")
+          file.writeText(content)
+        }
+      }
+    }
+}
+
+fun bumpVersion(fileName: String, versionPattern: String) {
+  val file = file(fileName)
+  println("Old version $version")
+  val snapshot = version.toString().contains("-SNAPSHOT")
+  val newVersion = takeIf { newVersion.isNullOrBlank() }?.let {
+    val versionArray = version.toString().removeSuffix("-SNAPSHOT").split(".")
+    "${versionArray[0]}.${versionArray[1]}.${if (snapshot) versionArray.last().toInt() else versionArray.last().toInt().plus(1)}"
+    } ?: newVersion
+
+  file.readText().apply {
+    println("Bump to $newVersion")
+    val content = this.replace("$versionPattern$version", "$versionPattern$newVersion")
+    println(content)
+    file.writeText(content)
   }
 }
+
