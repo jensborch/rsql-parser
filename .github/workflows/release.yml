@@ -45,3 +45,7 @@ jobs:
         run: gh pr create -B master --title 'Release version ${{ github.event.inputs.version }}' --body 'This pull request bumps the version to ${{ github.event.inputs.version }}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  build:
+    name: Build
+    needs: release
+    uses: ./.github/workflows/build.yml
