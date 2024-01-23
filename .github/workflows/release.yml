@@ -40,6 +40,6 @@ jobs:
           git tag -a v${{ github.event.inputs.version }} -m "Release version ${{ github.event.inputs.version }}"
           git push origin release-${{ github.event.inputs.version }} --follow-tags
       - name: Create Pull Request
-        run: gh pr create -B release-${{ github.event.inputs.version }} -H release-${{ github.event.inputs.version }} --title 'Release version ${{ github.event.inputs.version }}' --body 'This pull request bumps the version to ${{ github.event.inputs.version }}'
+        run: gh pr create -B master --title 'Release version ${{ github.event.inputs.version }}' --body 'This pull request bumps the version to ${{ github.event.inputs.version }}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
