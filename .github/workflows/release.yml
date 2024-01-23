@@ -19,6 +19,8 @@ jobs:
         with:
           distribution: "temurin"
           java-version: 8
+      - name: Checkout Branch
+        uses: actions/checkout@v4          
       - name: Create Release Branch
         run: |
           git checkout -b release-${{ github.event.inputs.version }}
