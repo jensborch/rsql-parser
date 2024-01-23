@@ -12,7 +12,6 @@ permissions:
 
 jobs:
   release:
-    name: Release
     runs-on: ubuntu-latest
     steps:
       - name: Set up JDK 8
