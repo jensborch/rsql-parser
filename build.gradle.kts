@@ -101,8 +101,8 @@ publishing {
 signing {
   isRequired = (version as String).endsWith("SNAPSHOT")
 
-  val signingKey = findProperty("signingKey") as String?
-  val signingPassword = findProperty("signingPassword") as String?
+  val signingKey = findProperty("SIGNING_KEY") as String?
+  val signingPassword = findProperty("SIGNING_PASSWORD") as String?
   useInMemoryPgpKeys(signingKey, signingPassword)
 
   sign(publishing.publications["java"])
@@ -114,6 +114,8 @@ nexusPublishing {
       val baseUri = uri("https://oss.sonatype.org")
       nexusUrl.set(baseUri.resolve("/service/local/"))
       snapshotRepositoryUrl.set(baseUri.resolve("/content/repositories/snapshots/"))
+      username = findProperty("SONATYPE_USERNAME") as String?
+      password = findProperty("SONATYPE_PASSWORD") as String?
     }
   }
 }
