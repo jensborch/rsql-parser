@@ -10,9 +10,8 @@ permissions:
 
 jobs:
   publish:
-    name: Publish
-    runs-on: ubuntu-latest
     if: contains(github.head_ref, 'release-') && github.event.pull_request.merged == true && github.base_ref == 'master'
+    runs-on: ubuntu-latest
     steps:
       - name: Set up JDK 8
         uses: actions/setup-java@v4
