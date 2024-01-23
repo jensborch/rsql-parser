@@ -1,7 +1,10 @@
 name: Build
 
 on:
-  workflow_call:
+  workflow_run:
+    workflows: ["release.yml"]
+    types:
+      - completed
   push:
     branches:
       - master
