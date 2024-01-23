@@ -21,6 +21,10 @@ jobs:
           java-version: 8
       - name: Checkout Branch
         uses: actions/checkout@v4
+      - name: Configure Git Author
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"        
       - name: Create Release Branch
         run: |
           git checkout -b release-${{ github.event.inputs.version }}
