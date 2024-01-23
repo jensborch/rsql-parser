@@ -13,6 +13,7 @@ permissions:
 
 jobs:
   release:
+    name: Release
     runs-on: ubuntu-latest
     steps:
       - name: Set up JDK 8
@@ -44,5 +45,3 @@ jobs:
         run: gh pr create -B master --title 'Release version ${{ github.event.inputs.version }}' --body 'This pull request bumps the version to ${{ github.event.inputs.version }}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Call Build workflow
-        uses: jensborch/rsql-parser/.github/workflows/build.yml@main
