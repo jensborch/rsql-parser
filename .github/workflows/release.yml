@@ -48,3 +48,4 @@ jobs:
         uses: peter-evans/repository-dispatch@v3
         with:
           event-type: start-build-event
+          client-payload: '{"ref": "${{ github.ref }}"}'
