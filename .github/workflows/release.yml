@@ -39,7 +39,7 @@ jobs:
         run: |
           git commit -am "Bump version to ${{ env.version }}"
           git tag -a v${{ env.version }} -m "Release version ${{ env.version }}"
-          git push origin release-${{ env.version }} --follow-tags
+          git push -u origin releases/${{ env.version }} --follow-tags
       - name: Create Pull Request
         run: gh pr create -B master --title 'Release version ${{ env.version }}' --body 'This pull request bumps the version to ${{ env.version }}'
         env:
