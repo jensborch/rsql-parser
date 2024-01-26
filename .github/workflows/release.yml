@@ -44,3 +44,7 @@ jobs:
         run: gh pr create -B master --title 'Release version ${{ env.version }}' --body 'This pull request bumps the version to ${{ env.version }}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Start build workflow
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          event-type: start-build-event
