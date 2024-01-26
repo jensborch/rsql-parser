@@ -1,11 +1,9 @@
 name: Release
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: "The release version"
-        required: true
+  push:
+    branches:
+      - 'releases/**'
 
 permissions:
   contents: write
@@ -14,6 +12,7 @@ permissions:
 jobs:
   release:
     name: Release
+    if: github.event.created
     runs-on: ubuntu-latest
     steps:
       - name: Set up JDK 8
@@ -23,29 +22,31 @@ jobs:
           java-version: 8
       - name: Checkout Branch
         uses: actions/checkout@v4
-      - name: Configure Git Author
+      - name: Set Version
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - name: Create Release Branch
-        run: |
-          git checkout -b release-${{ github.event.inputs.version }}
+          echo "version=$(echo ${{ github.ref }} | sed 's/refs\/heads\/releases\///')" >> $GITHUB_ENV
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1
       - name: Bump Version
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: bumpVersion -Prelease.version=${{ github.event.inputs.version }}
+          arguments: bumpVersion -Prelease.version=${{ env.version }}
       - name: Commit and Push Changes
         run: |
-          git commit -am "Bump version to ${{ github.event.inputs.version }}"
-          git tag -a v${{ github.event.inputs.version }} -m "Release version ${{ github.event.inputs.version }}"
-          git push origin release-${{ github.event.inputs.version }} --follow-tags
+          git commit -am "Bump version to ${{ env.version }}"
+          git tag -a v${{ env.version }} -m "Release version ${{ env.version }}"
+          git push origin release-${{ env.version }} --follow-tags
       - name: Create Pull Request
-        run: gh pr create -B master --title 'Release version ${{ github.event.inputs.version }}' --body 'This pull request bumps the version to ${{ github.event.inputs.version }}'
+        run: gh pr create -B master --title 'Release version ${{ env.version }}' --body 'This pull request bumps the version to ${{ env.version }}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  build:
-    name: Build
-    needs: release
-    uses: ./.github/workflows/build.yml
+          arguments: bumpVersion -Prelease.version=${{ env.version }}
+      - name: Commit and Push Changes
+        run: |
+          git commit -am "Bump version to ${{ env.version }}"
+          git tag -a v${{ env.version }} -m "Release version ${{ env.version }}"
+          git push origin release-${{ env.version }} --follow-tags
+      - name: Create Pull Request
+        run: gh pr create -B master --title 'Release version ${{ env.version }}' --body 'This pull request bumps the version to ${{ env.version }}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
