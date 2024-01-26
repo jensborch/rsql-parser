@@ -31,6 +31,10 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: bumpVersion -Prelease.version=${{ env.version }}
+      - name: Configure Git Author
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Commit and Push Changes
         run: |
           git commit -am "Bump version to ${{ env.version }}"
