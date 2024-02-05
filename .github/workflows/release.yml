@@ -20,8 +20,16 @@ jobs:
         with:
           distribution: "temurin"
           java-version: 8
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
       - name: Checkout Branch
         uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
       - name: Set Version
         run: |
           echo "version=$(echo ${{ github.ref }} | sed 's/refs\/heads\/releases\///')" >> $GITHUB_ENV
@@ -43,9 +51,4 @@ jobs:
       - name: Create Pull Request
         run: gh pr create -B master --title 'Release version ${{ env.version }}' --body 'This pull request bumps the version to ${{ env.version }}'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Start build workflow
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          event-type: start-build-event
-          client-payload: '{"ref": "${{ github.ref }}"}'
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
