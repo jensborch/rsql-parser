@@ -55,8 +55,3 @@ jobs:
             token: ${{ steps.app-token.outputs.token }}
             title: 'Release version ${{ env.version }}'
             body: 'This pull request bumps the version to ${{ env.version }}'
-            draft: false
-      - name: Approve Pull Request
-        run: gh pr review --approve
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
