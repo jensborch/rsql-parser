@@ -41,22 +41,22 @@ jobs:
           arguments: bumpVersion -Prelease.version=${{ env.version }}
       - name: Configure Git Author
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git config user.name "GitHub Actions"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Commit and Push Changes
         run: |
-          git commit -am "Bump version to ${{ env.version }}"
-          git tag -a v${{ env.version }} -m "Release version ${{ env.version }}"
-          git push -u origin releases/${{ env.version }} --follow-tags
-      - name: Create Pull Request
-        run: gh pr create -B master --title 'Release version ${{ env.version }}' --body 'This pull request bumps the version to ${{ env.version }}'
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+            git commit -am "Bump version to ${{ env.version }}"
+            git tag -a v${{ env.version }} -m "Release version ${{ env.version }}"
+            git push -u origin releases/${{ env.version }} --follow-tags
+      - name: Create PR
+        id: cpr
+        uses: peter-evans/create-pull-request@v6
+        with:
+            token: ${{ steps.app-token.outputs.token }}
+            title: 'Release version ${{ env.version }}'
+            body: 'This pull request bumps the version to ${{ env.version }}'
+            draft: false
       - name: Approve Pull Request
         run: gh pr review --approve
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-      - name: Merge Pull Request
-        run: gh pr merge --delete-branch
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
