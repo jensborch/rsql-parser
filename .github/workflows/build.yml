@@ -5,8 +5,8 @@ on:
   push:
     branches:
       - master
-  repository_dispatch:
-    types: [start-build-event]
+  pull_request:
+    types: [opened, reopened]
 
 jobs:
   build:
