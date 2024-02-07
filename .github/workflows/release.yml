@@ -45,7 +45,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Commit and Push Changes
         run: |
-            git commit -am "Bump version to ${{ env.version }}"
+            git commit -am "Bump version to ${{ env.version }} || true"
             git tag -a v${{ env.version }} -m "Release version ${{ env.version }}"
             git push -u origin releases/${{ env.version }} --follow-tags
       - name: Create Pull Request
