@@ -25,18 +25,13 @@ jobs:
         id: get_version
         run: echo "::set-output name=version::$(git describe --tags --abbrev=0)"
       - name: Create GitHub Release
-        uses: actions/create-release@v1
+        run: gh release create ${{ steps.get_version.outputs.version }} --verify-tag --title ${{ steps.get_version.outputs.version }} --notes "Release version ${{ steps.get_version.outputs.version }}"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.get_version.outputs.version }}
-          release_name: ${{ steps.get_version.outputs.version }}
-          body: |
-            Release version ${{ steps.get_version.outputs.version }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v2
       - name: Publish package
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: publishToSonatype
         env:
