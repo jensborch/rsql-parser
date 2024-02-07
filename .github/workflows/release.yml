@@ -43,11 +43,9 @@ jobs:
         run: |
             git config user.name "GitHub Actions"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - name: Commit
-        run: git commit -am "Bump version to ${{ env.version }}"
-        continue-on-error: true
-      - name: Tag and Push Changes
+      - name: Commit and Push Changes
         run: |
+            git commit -am "Bump version to ${{ env.version }}"
             git tag -a v${{ env.version }} -m "Release version ${{ env.version }}"
             git push -u origin releases/${{ env.version }} --follow-tags
       - name: Create Pull Request
