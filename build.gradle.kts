@@ -165,7 +165,7 @@ val newVersion: String? by project
 tasks.register("bumpVersion") {
     this.doFirst {
       bumpVersion("gradle.properties", "version=")
-      bumpVersion("README.adoc", "version: ")
+      bumpVersion("README.adoc", "version: ", true)
     }
 }
 
@@ -183,17 +183,17 @@ tasks.register("toSnapshot") {
     }
 }
 
-fun bumpVersion(fileName: String, versionPattern: String) {
+fun bumpVersion(fileName: String, versionPattern: String, removeSnapshot: Boolean = false) {
   val file = file(fileName)
   val snapshot = version.toString().contains("-SNAPSHOT")
   val newVersion = takeIf { newVersion.isNullOrBlank() }?.let {
     val versionArray = version.toString().removeSuffix("-SNAPSHOT").split(".")
     "${versionArray[0]}.${versionArray[1]}.${if (snapshot) versionArray.last().toInt() else versionArray.last().toInt().plus(1)}"
     } ?: newVersion
-
-  println("Bumping from version $version to $newVersion in $fileName")
+  val oldVersion = if (snapshot && removeSnapshot) version.toString().removeSuffix("-SNAPSHOT") else version.toString()
+  println("Bumping from version $oldVersion to $newVersion in $fileName")
   file.readText().apply {
-    val content = this.replace("$versionPattern$version", "$versionPattern$newVersion")
+    val content = this.replace("$versionPattern$oldVersion", "$versionPattern$newVersion")
     file.writeText(content)
   }
 }
