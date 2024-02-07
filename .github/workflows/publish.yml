@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Get the version
         id: get_version
-        run: echo "::set-output name=version::$(git describe --tags --abbrev=0)"
+        run: echo "version=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
       - name: Create GitHub Release
         run: gh release create ${{ steps.get_version.outputs.version }} --verify-tag --title ${{ steps.get_version.outputs.version }} --notes "Release version ${{ steps.get_version.outputs.version }}"
         env:
