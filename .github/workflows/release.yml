@@ -34,9 +34,9 @@ jobs:
         run: |
           echo "version=$(echo ${{ github.ref }} | sed 's/refs\/heads\/releases\///')" >> $GITHUB_ENV
       - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v2
       - name: Bump Version
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: bumpVersion -PnewVersion=${{ env.version }}
       - name: Configure Git Author
@@ -52,4 +52,3 @@ jobs:
         run: gh pr create -B master --title 'Release version ${{ env.version }}' --body 'This pull request bumps the version to ${{ env.version }}'
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-
