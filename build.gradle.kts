@@ -5,7 +5,7 @@ plugins {
   `maven-publish`
   signing
   id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
-  id("org.javacc.javacc") version "3.0.0"
+  id("org.javacc.javacc") version "3.0.2"
 }
 
 repositories {
@@ -17,8 +17,8 @@ dependencies {
 
   testImplementation("nl.jqno.equalsverifier:equalsverifier:3.15.6")
 
-  testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
+  testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
 
   testImplementation("org.spockframework:spock-core:2.4-M1-groovy-4.0")
 
