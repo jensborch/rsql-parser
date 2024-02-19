@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    uses: jensborch/.github/workflows/gradle-build.yml@main
+    uses: jensborch/workflows/.github/gradle-build.yml@main
     secrets: inherit
     with:
       java-version: 8
