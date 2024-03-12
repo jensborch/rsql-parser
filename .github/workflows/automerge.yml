@@ -5,6 +5,10 @@ on:
     branches: [ master ]
 
 jobs:
+  build:
+    uses: jensborch/workflows/.github/workflows/gradle-build.yml@main
   automerge:
+    needs:
+      - build
     uses: jensborch/workflows/.github/workflows/dependabot-automerge.yml@main
     secrets: inherit
