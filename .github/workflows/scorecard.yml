@@ -11,12 +11,14 @@ on:
   push:
     branches: ['master']
 
-permissions: read-all
-
 jobs:
   call-workflow:
     uses: jensborch/workflows/.github/workflows/scorecard.yml@main
     permissions:
+      actions: read
+      contents: read
+      deployments: read
+      packages: read
       security-events: write
       id-token: write
 
