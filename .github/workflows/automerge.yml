@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+    if: ${{ github.actor == 'dependabot[bot]' }}
     uses: jensborch/workflows/.github/workflows/gradle-build.yml@main
   automerge:
     needs:
