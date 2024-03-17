@@ -1,6 +1,7 @@
 name: 'Code Scanning - Action'
 
 on:
+  workflow_call:
   push:
     branches: [main]
   pull_request:
@@ -19,4 +20,4 @@ on:
 
 jobs:
   scan:
-    uses: jensborch/workflows/.github/workflows/codeql-analysis.yml.yml@main
+    uses: jensborch/workflows/.github/workflows/codeql-analysis.yml@main
