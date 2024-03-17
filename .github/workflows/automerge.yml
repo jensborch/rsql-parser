@@ -2,17 +2,10 @@ name: "Dependabot Automerge"
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
-  build:
-    if: ${{ github.actor == 'dependabot[bot]' }}
-    uses: jensborch/workflows/.github/workflows/gradle-build.yml@main
-    with:
-      java-version: 8
   automerge:
-    needs:
-      - build
     uses: jensborch/workflows/.github/workflows/dependabot-automerge.yml@main
     permissions:
       pull-requests: write
