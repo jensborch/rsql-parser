@@ -3,11 +3,14 @@ name: Release
 on:
   push:
     branches:
-      - 'releases/**'
+      - "releases/**"
 
 jobs:
   call-workflow:
     uses: jensborch/workflows/.github/workflows/gradle-release.yml@main
     secrets: inherit
+    permissions:
+      contents: write
+      pull-requests: write
     with:
-        java-version: 8
+      java-version: 8

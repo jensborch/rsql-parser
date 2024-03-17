@@ -1,7 +1,7 @@
-name: 'Code Scanning - Action'
+name: "Code Scanning - Action"
 
 on:
-  workflow_call:
+  workflow_dispatch:
   push:
     branches: [main]
   pull_request:
@@ -16,8 +16,12 @@ on:
     #        │  │ │ │ │
     #        │  │ │ │ │
     #        *  * * * *
-    - cron: '30 1 * * 0'
+    - cron: "30 1 * * 0"
 
 jobs:
   scan:
     uses: jensborch/workflows/.github/workflows/codeql-analysis.yml@main
+    permissions:
+      security-events: write
+      actions: read
+      contents: read

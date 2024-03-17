@@ -9,5 +9,7 @@ jobs:
   call-workflow:
     uses: jensborch/workflows/.github/workflows/gradle-publish.yml@main
     secrets: inherit
+    permissions:
+      contents: write
     with:
-        java-version: 8
+      java-version: 8
