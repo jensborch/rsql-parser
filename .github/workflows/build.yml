@@ -1,7 +1,7 @@
 name: Build
 
 on:
-  workflow_call:
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -11,6 +11,5 @@ on:
 jobs:
   build:
     uses: jensborch/workflows/.github/workflows/gradle-build.yml@main
-    secrets: inherit
     with:
       java-version: 8

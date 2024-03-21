@@ -8,8 +8,8 @@ Jakub Jirutka <https://github.com/jirutka[@jirutka]>
 :src-base: link:src/main/java/cz/jirutka/rsql/parser
 
 ifdef::env-github[]
-image:https://github.com/{gh-name}/actions/workflows/build.yaml/badge.svg["Build", link="https://github.com/jensborch/rsql-parser/actions/workflows/build.yaml"]
-image:https://codecov.io/github/jensborch/rsql-parser/branch/master/graph/badge.svg?token=L13HXQDRYY["codecov", link="https://codecov.io/github/jensborch/rsql-parser"]
+image:https://github.com/{gh-name}/actions/workflows/build.yml/badge.svg["Build", link="https://github.com/{gh-name}/actions/workflows/build.yml"]
+image:https://codecov.io/github/{gh-name}/branch/master/graph/badge.svg?token=L13HXQDRYY["codecov", link="https://codecov.io/github/{gh-name}"]
 image:https://maven-badges.herokuapp.com/maven-central/{mvn-group}/{name}/badge.svg["Maven Central", link="https://maven-badges.herokuapp.com/maven-central/{mvn-group}/{name}"]
 endif::env-github[]
 
