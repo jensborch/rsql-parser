@@ -9,4 +9,5 @@ jobs:
     uses: jensborch/workflows/.github/workflows/dependabot-automerge.yml@main
     permissions:
       pull-requests: write
+      contents: write
     secrets: inherit
