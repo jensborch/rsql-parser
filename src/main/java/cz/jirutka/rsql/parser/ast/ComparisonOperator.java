@@ -120,36 +120,6 @@ public final class ComparisonOperator {
         this(new String[]{symbol, altSymbol}, type);
     }
 
-
-    /**
-     * @param symbols    Textual representation of this operator (e.g. <tt>=gt=</tt>); the first item
-     *                   is primary representation, any others are alternatives. Must match
-     *                   {@literal =[a-zA-Z]*=|[><]=?|!=}.
-     * @param type       Whether this operator may be used with single, multiple or nested arguments. This is
-     *                   then validated in {@link NodesFactory}.
-     * @throws IllegalArgumentException If the {@code symbols} is either <tt>null</tt>, empty,
-     *                                  or contain illegal symbols.
-     */
-    public ComparisonOperator(String[] symbols, Type type) {
-        Assert.notEmpty(symbols, "symbols must not be null or empty");
-        for (String sym : symbols) {
-            Assert.isTrue(isValidOperatorSymbol(sym), "symbol must match: %s", SYMBOL_PATTERN);
-        }
-        this.type = type;
-        this.symbols = symbols.clone();
-    }
-
-    /**
-     * @param symbol     Textual representation of this operator (e.g. <tt>=gt=</tt>); Must match
-     *                   {@literal =[a-zA-Z]*=|[><]=?|!=}.
-     * @param type       Whether this operator may be used with single, multiple or nested arguments. This
-     *                   is then validated in {@link NodesFactory}.
-     * @see #ComparisonOperator(String[], Type)
-     */
-    public ComparisonOperator(String symbol, Type type) {
-        this(new String[]{symbol}, type);
-    }
-
     /**
      * @param symbols  Textual representation of this operator (e.g. <tt>=gt=</tt>); the first item is primary
      *                 representation, any others are alternatives. Must match {@literal =[a-zA-Z]*=|[><]=?|!=}.
@@ -178,100 +148,6 @@ public final class ComparisonOperator {
      */
     public ComparisonOperator(String symbol, Arity arity) {
         this(new String[]{symbol}, arity);
-    }
-
-    /**
-     * @param symbol     Textual representation of this operator (e.g. <tt>=gt=</tt>); Must match
-     *                   {@literal =[a-zA-Z]*=|[><]=?|!=}.
-     * @param altSymbol  Alternative representation for {@code symbol}.
-     * @param type       Whether this operator may be used with single, multiple or nested arguments.
-     * @see #ComparisonOperator(String[], Type)
-     */
-    public ComparisonOperator(String symbol, String altSymbol, Type type) {
-        this(new String[]{symbol, altSymbol}, type);
-    }
-
-    /**
-     * @param symbol    Textual representation of this operator (e.g. <tt>=gt=</tt>); Must match
-     *                  {@literal =[a-zA-Z]*=|[><]=?|!=}.
-     * @param altSymbol Alternative representation for {@code symbol}.
-     * @param arity     Arity of this operator.
-     * @see #ComparisonOperator(String[], boolean)
-     * @since 2.3.0
-     */
-    public ComparisonOperator(String symbol, String altSymbol, Arity arity) {
-        this(new String[]{symbol, altSymbol}, arity);
-    }
-
-
-    /**
-     * @param symbols    Textual representation of this operator (e.g. <tt>=gt=</tt>); the first item
-     *                   is primary representation, any others are alternatives. Must match
-     *                   {@literal =[a-zA-Z]*=|[><]=?|!=}.
-     * @param type       Whether this operator may be used with single, multiple or nested arguments. This is
-     *                   then validated in {@link NodesFactory}.
-     * @throws IllegalArgumentException If the {@code symbols} is either <tt>null</tt>, empty,
-     *                                  or contain illegal symbols.
-     */
-    public ComparisonOperator(String[] symbols, Type type) {
-        Assert.notEmpty(symbols, "symbols must not be null or empty");
-        for (String sym : symbols) {
-            Assert.isTrue(isValidOperatorSymbol(sym), "symbol must match: %s", SYMBOL_PATTERN);
-        }
-        this.type = type;
-        this.symbols = symbols.clone();
-    }
-
-    /**
-     * @param symbol     Textual representation of this operator (e.g. <tt>=gt=</tt>); Must match
-     *                   {@literal =[a-zA-Z]*=|[><]=?|!=}.
-     * @param type       Whether this operator may be used with single, multiple or nested arguments. This
-     *                   is then validated in {@link NodesFactory}.
-     * @see #ComparisonOperator(String[], Type)
-     */
-    public ComparisonOperator(String symbol, Type type) {
-        this(new String[]{symbol}, type);
-    }
-
-    /**
-     * @param symbols  Textual representation of this operator (e.g. <tt>=gt=</tt>); the first item is primary
-     *                 representation, any others are alternatives. Must match {@literal =[a-zA-Z]*=|[><]=?|!=}.
-     * @param arity    Arity of this operator.
-     * @throws IllegalArgumentException If the {@code symbols} is either <tt>null</tt>, empty, or contain illegal
-     *                                  symbols.
-     * @since 2.3.0
-     */
-    public ComparisonOperator(String[] symbols, Arity arity) {
-        Assert.notEmpty(symbols, "symbols must not be null or empty");
-        Assert.notNull(arity, "arity must not be null");
-        for (String sym : symbols) {
-            Assert.isTrue(isValidOperatorSymbol(sym), "symbol must match: %s", SYMBOL_PATTERN);
-        }
-
-        this.type = new MultiValue(arity);
-        this.symbols = symbols.clone();
-    }
-
-    /**
-     * @param symbol Textual representation of this operator (e.g. <tt>=gt=</tt>); Must match
-     *               {@literal =[a-zA-Z]*=|[><]=?|!=}.
-     * @param arity  Arity of this operator.
-     * @see #ComparisonOperator(String[], boolean)
-     * @since 2.3.0
-     */
-    public ComparisonOperator(String symbol, Arity arity) {
-        this(new String[]{symbol}, arity);
-    }
-
-    /**
-     * @param symbol     Textual representation of this operator (e.g. <tt>=gt=</tt>); Must match
-     *                   {@literal =[a-zA-Z]*=|[><]=?|!=}.
-     * @param altSymbol  Alternative representation for {@code symbol}.
-     * @param type       Whether this operator may be used with single, multiple or nested arguments.
-     * @see #ComparisonOperator(String[], Type)
-     */
-    public ComparisonOperator(String symbol, String altSymbol, Type type) {
-        this(new String[]{symbol, altSymbol}, type);
     }
 
     /**

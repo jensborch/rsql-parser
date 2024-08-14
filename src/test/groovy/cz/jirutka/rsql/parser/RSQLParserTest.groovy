@@ -287,6 +287,7 @@ class RSQLParserTest extends Specification {
             def nestedNode = new ComparisonNode(new ComparisonOperator("=="), "sci-fi", new StringArguments("true"));
             def parser = new RSQLParser([EQUAL, nestedOperator] as Set)
             def expected = new ComparisonNode(nestedOperator, "genres", new NestedArguments(nestedNode));
+    }
 
     def 'Should parse empty multi-argument operators'() {
         expect:
@@ -299,7 +300,6 @@ class RSQLParserTest extends Specification {
         's0=out=()'   | out('s0')
         's0=out=(  )' | out('s0')
     }
-
 
     def 'Should parse multi-argument operators with whitespaces values'() {
         expect:
@@ -342,7 +342,4 @@ class RSQLParserTest extends Specification {
     def notNull(sel) { new ComparisonNode(NOT_NULL, sel, []) }
     //def eq(sel, arg) { new ComparisonNode(EQUAL, sel, new StringArguments(arg)) }
     //def out(sel, ...args) { new ComparisonNode(NOT_IN, sel, new StringArguments(args)) }
-}
-    def eq(sel, arg) { new ComparisonNode(EQUAL, sel, new StringArguments(arg)) }
-    def out(sel, ...args) { new ComparisonNode(NOT_IN, sel, new StringArguments(args as List<String>)) }
 }
