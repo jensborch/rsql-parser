@@ -216,17 +216,31 @@ Object Arguments():
         {
         ((Node)value).setNestingLevel(nestingLevel);
         }
-        <RPAREN> 
-    ) 
+        <RPAREN>
+    )
     {
         nestingLevel--;
         ((Node)value).setNestingLevel(nestingLevel);
-        return value; 
+        return value;
     }
     |
-    ( <LPAREN> value = CommaSepArguments() <RPAREN> ) { return value; }
+    ( <LPAREN> value = OptionalCommaSepArguments() <RPAREN> ) { return value; }
     |
-    value = Argument() { return value; }
+    (value = Argument() { return value; })?
+    {
+      return Collections.emptyList();
+    }
+}
+
+List<String> OptionalCommaSepArguments():
+{
+    List<String> list = null;
+}
+{
+    [ list = CommaSepArguments() ]
+    {
+      return list == null ? Collections.emptyList() : list;
+    }
 }
 
 List<String> CommaSepArguments():

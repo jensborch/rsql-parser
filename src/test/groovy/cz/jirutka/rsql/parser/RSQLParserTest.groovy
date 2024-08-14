@@ -240,7 +240,7 @@ class RSQLParserTest extends Specification {
 
     def 'use parser with custom set of operators'() {
         setup:
-            def allOperator = new ComparisonOperator('=all=', ComparisonOperator.Type.MULTI_VALUED)
+            def allOperator = new ComparisonOperator('=all=', ComparisonOperator.Type.MULTIARY)
             def parser = new RSQLParser([EQUAL, allOperator] as Set)
             def expected = and(eq('name', 'TRON'), new ComparisonNode(allOperator, 'genres', new StringArguments('sci-fi', 'thriller')))
 

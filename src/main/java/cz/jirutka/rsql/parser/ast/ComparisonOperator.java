@@ -252,7 +252,7 @@ public final class ComparisonOperator {
      * Defines the different types of arguments.
      */
     public abstract static class Type {
-        public static final Type MULTIARY = new MultiValue(Arity.of(1, Integer.MAX_VALUE));
+        public static final Type MULTIARY = new MultiValue(Arity.of(0, Integer.MAX_VALUE));
         public static final Type UNARY = new MultiValue(Arity.nary(1));
         public static final Type NULLARY = new MultiValue(Arity.nullary());
         public static final Type NESTED = new Nested();

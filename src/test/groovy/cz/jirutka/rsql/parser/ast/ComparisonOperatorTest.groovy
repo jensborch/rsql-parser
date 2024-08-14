@@ -46,7 +46,7 @@ class ComparisonOperatorTest extends Specification {
 
     def 'equals when contains same symbols'() {
         expect:
-        new ComparisonOperator('=out=', '=notin=') == new ComparisonOperator('=out=', '=notin=', ComparisonOperator.Type.MULTI_VALUED)
+        new ComparisonOperator('=out=', '=notin=') == new ComparisonOperator('=out=', '=notin=', ComparisonOperator.Type.MULTIARY)
     }
 
     def 'equals when contains same symbols 2'() {
