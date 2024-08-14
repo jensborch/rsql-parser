@@ -52,7 +52,7 @@ public final class ComparisonOperator {
      */
     @Deprecated
     public ComparisonOperator(String[] symbols, boolean multiValue) {
-        this(symbols, (Type) (multiValue ? Type.MULTI_VALUED : Type.SINGLE_VALUED));
+        this(symbols, (Type) (multiValue ? Type.MULTIARY : Type.UNARY));
     }
 
     /**
@@ -168,7 +168,7 @@ public final class ComparisonOperator {
      * @see #ComparisonOperator(String[], Type)
      */
     public ComparisonOperator(String... symbols) {
-        this(symbols, Type.SINGLE_VALUED);
+        this(symbols, Type.UNARY);
     }
 
 
@@ -252,8 +252,9 @@ public final class ComparisonOperator {
      * Defines the different types of arguments.
      */
     public abstract static class Type {
-        public static final Type MULTI_VALUED = new MultiValue(Arity.of(1, Integer.MAX_VALUE));
-        public static final Type SINGLE_VALUED = new MultiValue(Arity.nary(1));
+        public static final Type MULTIARY = new MultiValue(Arity.of(1, Integer.MAX_VALUE));
+        public static final Type UNARY = new MultiValue(Arity.nary(1));
+        public static final Type NULLARY = new MultiValue(Arity.nullary());
         public static final Type NESTED = new Nested();
 
         public abstract boolean isMultiValue();
@@ -281,9 +282,7 @@ public final class ComparisonOperator {
             return false;
         }
         public Arity getArity() {
-            return null;
+            return new NullAry();
         }
     }
-
-
 }

@@ -56,7 +56,7 @@ public final class ComparisonNode extends AbstractNode {
         Assert.notBlank(selector, "selector must not be blank");
         Assert.notNull(arguments, "arguments must not be null");
         validate(operator, arguments.asStringList().size());
-        if (operator.getType() == ComparisonOperator.Type.SINGLE_VALUED) {
+        if (operator.getType() == ComparisonOperator.Type.UNARY) {
             Assert.isTrue(arguments.asStringList().size() == 1,
                     "operator %s expects single argument, but multiple values given", operator);
         } else if (operator.getType() == ComparisonOperator.Type.NESTED) {
@@ -176,7 +176,7 @@ public final class ComparisonNode extends AbstractNode {
 
     @Override
     public String toString() {
-        return operator.getType() == ComparisonOperator.Type.SINGLE_VALUED ? selector + operator + arguments : selector + operator + "(" + arguments + ")";
+        return operator.getType() == ComparisonOperator.Type.UNARY ? selector + operator + arguments : selector + operator + "(" + arguments + ")";
     }
 
     @Override

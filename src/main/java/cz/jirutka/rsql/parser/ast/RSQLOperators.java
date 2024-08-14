@@ -32,25 +32,16 @@ import static java.util.Arrays.asList;
 public abstract class RSQLOperators {
 
     public static final ComparisonOperator
-            EQUAL = new ComparisonOperator("==", Arity.nary(1)),
-            NOT_EQUAL = new ComparisonOperator("!=", Arity.nary(1)),
-            GREATER_THAN = new ComparisonOperator("=gt=", ">", Arity.nary(1)),
-            GREATER_THAN_OR_EQUAL = new ComparisonOperator("=ge=", ">=", Arity.nary(1)),
-            LESS_THAN = new ComparisonOperator("=lt=", "<", Arity.nary(1)),
-            LESS_THAN_OR_EQUAL = new ComparisonOperator("=le=", "<=", Arity.nary(1)),
-            /*IN = new ComparisonOperator("=in=", Arity.of(0, Integer.MAX_VALUE)),
-            NOT_IN = new ComparisonOperator("=out=", Arity.of(0, Integer.MAX_VALUE)),*/
-            IS_NULL = new ComparisonOperator("=null=", Arity.nary(0)),
-            NOT_NULL = new ComparisonOperator("=notnull=", Arity.nary(0)),
-            /*EQUAL = new ComparisonOperator("=="),
-            NOT_EQUAL = new ComparisonOperator("!="),
-            GREATER_THAN = new ComparisonOperator("=gt=", ">"),
-            GREATER_THAN_OR_EQUAL = new ComparisonOperator("=ge=", ">="),
-            LESS_THAN = new ComparisonOperator("=lt=", "<"),
-            LESS_THAN_OR_EQUAL = new ComparisonOperator("=le=", "<="),*/
-            IN = new ComparisonOperator("=in=", ComparisonOperator.Type.MULTI_VALUED),
-            NOT_IN = new ComparisonOperator("=out=", ComparisonOperator.Type.MULTI_VALUED);
-
+            EQUAL = new ComparisonOperator("==", ComparisonOperator.Type.UNARY),
+            NOT_EQUAL = new ComparisonOperator("!=", ComparisonOperator.Type.UNARY),
+            GREATER_THAN = new ComparisonOperator("=gt=", ">", ComparisonOperator.Type.UNARY),
+            GREATER_THAN_OR_EQUAL = new ComparisonOperator("=ge=", ">=", ComparisonOperator.Type.UNARY),
+            LESS_THAN = new ComparisonOperator("=lt=", "<", ComparisonOperator.Type.UNARY),
+            LESS_THAN_OR_EQUAL = new ComparisonOperator("=le=", "<=", ComparisonOperator.Type.UNARY),
+            IN = new ComparisonOperator("=in=", ComparisonOperator.Type.MULTIARY),
+            NOT_IN = new ComparisonOperator("=out=", ComparisonOperator.Type.MULTIARY),
+            IS_NULL = new ComparisonOperator("=null=", ComparisonOperator.Type.NULLARY),
+            NOT_NULL = new ComparisonOperator("=notnull=", ComparisonOperator.Type.NULLARY);
 
     public static Set<ComparisonOperator> defaultOperators() {
         return new HashSet<>(asList(EQUAL, NOT_EQUAL, GREATER_THAN, GREATER_THAN_OR_EQUAL,
