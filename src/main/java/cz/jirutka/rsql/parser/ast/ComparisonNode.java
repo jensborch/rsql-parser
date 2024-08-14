@@ -52,6 +52,7 @@ public final class ComparisonNode extends AbstractNode {
      * @throws IllegalArgumentException If one of the conditions specified above it not met.
      */
     public ComparisonNode(ComparisonOperator operator, String selector, ComparisonArguments arguments) {
+    public ComparisonNode(ComparisonOperator operator, String selector, ComparisonArguments arguments) {
         Assert.notNull(operator, "operator must not be null");
         Assert.notBlank(selector, "selector must not be blank");
         Assert.notNull(arguments, "arguments must not be null");
@@ -119,6 +120,17 @@ public final class ComparisonNode extends AbstractNode {
     }
 
     /**
+     * Return arguments. It's guaranteed that string arguments contains at least one item.
+     * When the operator is not {@link ComparisonOperator#isMultiValue() multiValue}, then it
+     * contains exactly one argument.
+     *
+     * @return the arguments.
+     */
+    public ComparisonArguments getArgumentsObject() {
+        return arguments;
+    }
+
+    /**
      * Returns a copy of the arguments list. It's guaranteed that it contains at least one item.
      * When the operator is not {@link ComparisonOperator#isMultiValue() multiValue}, then it
      * contains exactly one argument.
@@ -126,6 +138,7 @@ public final class ComparisonNode extends AbstractNode {
      * @return a copy of the arguments list.
      * @deprecated Use {@link #getArgumentsObject()}
      */
+    @Deprecated
     @Deprecated
     public List<String> getArguments() {
         return new ArrayList<>(arguments.asStringList());

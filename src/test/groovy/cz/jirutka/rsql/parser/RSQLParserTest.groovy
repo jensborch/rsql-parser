@@ -269,7 +269,7 @@ class RSQLParserTest extends Specification {
         setup:
             def allOperator = new ComparisonOperator('=all=', Arity.of(1, Integer.MAX_VALUE))
             def parser = new RSQLParser([EQUAL, allOperator] as Set)
-            def expected = and(eq('name', 'TRON'), new ComparisonNode(allOperator, 'genres', ['sci-fi', 'thriller']))
+            def expected = and(eq('name', 'TRON'), new ComparisonNode(allOperator, 'genres', new StringArguments('sci-fi', 'thriller')))
 
         expect:
             parser.parse('name==TRON;genres=all=(sci-fi,thriller)') == expected
@@ -280,6 +280,13 @@ class RSQLParserTest extends Specification {
             def ex = thrown(RSQLParserException)
             ex.cause instanceof UnknownOperatorException
     }
+
+    def 'use parser with custom nested operators'() {
+        setup:
+            def nestedOperator = new ComparisonOperator('=nested=', ComparisonOperator.Type.NESTED)
+            def nestedNode = new ComparisonNode(new ComparisonOperator("=="), "sci-fi", new StringArguments("true"));
+            def parser = new RSQLParser([EQUAL, nestedOperator] as Set)
+            def expected = new ComparisonNode(nestedOperator, "genres", new NestedArguments(nestedNode));
 
     def 'Should parse empty multi-argument operators'() {
         expect:
