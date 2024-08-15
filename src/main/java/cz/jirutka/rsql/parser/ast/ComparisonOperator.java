@@ -52,7 +52,7 @@ public final class ComparisonOperator {
      */
     @Deprecated
     public ComparisonOperator(String[] symbols, boolean multiValue) {
-        this(symbols, (Type) (multiValue ? Type.MULTIARY : Type.UNARY));
+        this(symbols, multiValue ? Type.MULTIARY : Type.UNARY);
     }
 
     /**

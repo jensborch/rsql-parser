@@ -26,8 +26,8 @@ package cz.jirutka.rsql.parser.ast;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static cz.jirutka.rsql.parser.ast.StringUtils.join;
 import static java.util.Collections.unmodifiableList;
 
 /**
@@ -39,7 +39,7 @@ public abstract class LogicalNode extends AbstractNode implements Iterable<Node>
     private final List<Node> children;
 
     private final LogicalOperator operator;
-    
+
     /**
      * @param operator Must not be <tt>null</tt>.
      * @param children Children nodes, i.e. operands; must not be <tt>null</tt>.
@@ -82,7 +82,7 @@ public abstract class LogicalNode extends AbstractNode implements Iterable<Node>
 
     @Override
     public String toString() {
-        return join(children, operator.toString(), "(", ")");
+        return "(" + children.stream().map(Node::toString).collect(Collectors.joining(operator.toString())) + ")";
     }
 
     @Override

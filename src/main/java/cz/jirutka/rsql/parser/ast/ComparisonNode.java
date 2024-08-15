@@ -24,8 +24,6 @@
  */
 package cz.jirutka.rsql.parser.ast;
 
-import static cz.jirutka.rsql.parser.ast.StringUtils.join;
-
 import java.util.ArrayList;
 import java.util.List;
 import net.jcip.annotations.Immutable;
