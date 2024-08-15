@@ -275,6 +275,11 @@ public final class ComparisonOperator {
         public boolean isMultiValue() {
             return getArity().max() > 1;
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            return this == obj || obj instanceof MultiValue && arity.equals(((MultiValue) obj).arity);
+        }
     }
 
     public static class Nested extends Type {
@@ -283,6 +288,11 @@ public final class ComparisonOperator {
         }
         public Arity getArity() {
             return new NullAry();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return this == obj || obj instanceof Nested;
         }
     }
 }

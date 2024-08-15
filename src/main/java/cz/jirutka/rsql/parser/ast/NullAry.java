@@ -38,4 +38,10 @@ final class NullAry implements Arity {
     public int max() {
         return 0;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this == obj || obj instanceof NullAry;
+     }
+
 }

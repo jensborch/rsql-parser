@@ -52,4 +52,10 @@ final class DynamicArity implements Arity {
     public int max() {
         return max;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this == obj || obj instanceof DynamicArity && ((Arity) obj).min() == min() && ((Arity) obj).max() == max();
+     }
+
 }

@@ -176,7 +176,11 @@ public final class ComparisonNode extends AbstractNode {
 
     @Override
     public String toString() {
-        return operator.getType() == ComparisonOperator.Type.UNARY ? selector + operator + arguments : selector + operator + "(" + arguments + ")";
+        if (operator.getType().equals(ComparisonOperator.Type.NULLARY)) {
+            return selector + operator;
+        } else {
+            return selector + operator + (arguments.asStringList().size() <= 1 && operator.getArity().max() == 1 ? arguments : "(" + arguments + ")");
+        }
     }
 
     @Override
