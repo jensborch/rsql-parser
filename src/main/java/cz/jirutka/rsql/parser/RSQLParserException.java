@@ -28,7 +28,22 @@ package cz.jirutka.rsql.parser;
  */
 public class RSQLParserException extends RuntimeException {
 
+    /**
+     * Constructs a new RSQLParserException with the specified detail message and cause.
+     *
+     * @param cause cause of the exception
+     */
     public RSQLParserException(Throwable cause) {
         super(cause);
     }
+
+    /**
+     * Constructs a new RSQLParserException with the specified detail message.
+     *
+     * @param message the detail message
+     */
+    public RSQLParserException(String message) {
+        super(message);
+    }
+
 }

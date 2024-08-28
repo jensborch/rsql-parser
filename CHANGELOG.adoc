@@ -1,6 +1,9 @@
 = Changelog
-:repo-uri: https://github.com/jirutka/rsql-parser
+:repo-uri: https://github.com/jensborch/rsql-parser
 :issue-uri: {repo-uri}/issues
+
+== 2.4.0 (2024-08-29)
+* Added support for nested queries
 
 == 2.3.2 (2024-05-01)
 * Avoid unnecessary copying ComparisonNode or it's arguments.

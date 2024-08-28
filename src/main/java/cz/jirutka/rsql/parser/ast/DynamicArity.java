@@ -2,6 +2,7 @@
  * The MIT License
  *
  * Copyright 2024 Edgar Asatryan <nstdio@gmail.com>.
+ * Copyright 2024 Jens Borch Christiansen <jens.borch@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -52,4 +53,15 @@ final class DynamicArity implements Arity {
     public int max() {
         return max;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this == obj || obj instanceof DynamicArity && ((Arity) obj).min() == min() && ((Arity) obj).max() == max();
+     }
+
+     @Override
+     public int hashCode() {
+         return Integer.hashCode(min + max);
+     }
+
 }

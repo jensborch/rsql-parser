@@ -1,7 +1,6 @@
 /*
  * The MIT License
  *
- * Copyright 2024 Edgar Asatryan <nstdio@gmail.com>.
  * Copyright 2024 Jens Borch Christiansen <jens.borch@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,35 +23,28 @@
  */
 package cz.jirutka.rsql.parser.ast;
 
-final class NAry implements Arity {
+final class NullAry implements Arity {
 
-    private final int n;
-
-    NAry(int n) {
-        if (n < 0) {
-            throw new IllegalArgumentException("n must be positive or zero");
-        }
-
-        this.n = n;
+    NullAry() {
     }
 
     @Override
     public int min() {
-        return n;
+        return 0;
     }
 
     @Override
     public int max() {
-        return n;
+        return 0;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return this == obj || obj instanceof NAry && ((Arity) obj).min() == min() && ((Arity) obj).max() == max();
-     }
+        return this == obj || obj instanceof NullAry;
+    }
 
-     @Override
-     public int hashCode() {
-         return Integer.hashCode(n);
-     }
+    @Override
+    public int hashCode() {
+        return 0;
+    }
 }

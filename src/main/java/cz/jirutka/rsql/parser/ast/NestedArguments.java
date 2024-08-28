@@ -1,7 +1,6 @@
 /*
  * The MIT License
  *
- * Copyright 2024 Edgar Asatryan <nstdio@gmail.com>.
  * Copyright 2024 Jens Borch Christiansen <jens.borch@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,35 +23,64 @@
  */
 package cz.jirutka.rsql.parser.ast;
 
-final class NAry implements Arity {
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import net.jcip.annotations.Immutable;
 
-    private final int n;
+/**
+ * Class representing nested arguments in the RSQL grammar.
+ */
+@Immutable
+public class NestedArguments implements ComparisonArguments {
 
-    NAry(int n) {
-        if (n < 0) {
-            throw new IllegalArgumentException("n must be positive or zero");
-        }
+    private Node node;
 
-        this.n = n;
+    public NestedArguments(Node node) {
+        Objects.requireNonNull(node);
+        this.node = node;
     }
 
     @Override
-    public int min() {
-        return n;
+    public Node asNode() {
+        return node;
     }
 
     @Override
-    public int max() {
-        return n;
+    public boolean isNested() {
+        return true;
+    }
+
+    @Override
+    public List<String> asStringList() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public String toString() {
+        return "(" + node + ")";
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.node);
+        return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return this == obj || obj instanceof NAry && ((Arity) obj).min() == min() && ((Arity) obj).max() == max();
-     }
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final NestedArguments other = (NestedArguments) obj;
+        return Objects.equals(this.node, other.node);
+    }
 
-     @Override
-     public int hashCode() {
-         return Integer.hashCode(n);
-     }
 }

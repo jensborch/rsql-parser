@@ -3,6 +3,7 @@
  *
  * Copyright 2013-2014 Jakub Jirutka <jakub@jirutka.cz>.
  * Copyright 2024 Edgar Asatryan <nstdio@gmail.com>.
+ * Copyright 2024 Jens Borch Christiansen <jens.borch@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +25,6 @@
  */
 package cz.jirutka.rsql.parser.ast;
 
-import static cz.jirutka.rsql.parser.ast.StringUtils.join;
-
 import java.util.ArrayList;
 import java.util.List;
 import net.jcip.annotations.Immutable;
@@ -41,30 +40,45 @@ public final class ComparisonNode extends AbstractNode {
 
     private final String selector;
 
-    private final List<String> arguments;
+    private final ComparisonArguments arguments;
 
     /**
+     * @param operator  Must not be <tt>null</tt>.
+     * @param selector  Must not be <tt>null</tt> or blank.
+     * @param arguments Must not be <tt>null</tt> or empty.
+     * @throws IllegalArgumentException If one of the conditions specified above it not met.
+     * @since 2.4
+     */
+    public ComparisonNode(ComparisonOperator operator, String selector, ComparisonArguments arguments) {
+        Assert.notNull(operator, "operator must not be null");
+        Assert.notBlank(selector, "selector must not be blank");
+        Assert.notNull(arguments, "arguments must not be null");
+        validate(operator, arguments.asStringList().size());
+        if (operator.getType() == ComparisonOperator.UNARY_TYPE) {
+            Assert.isTrue(arguments.asStringList().size() == 1,
+                    "operator %s expects single argument, but multiple values given", operator);
+        } else if (operator.getType() == ComparisonOperator.NESTED_TYPE) {
+            Assert.isTrue(arguments instanceof NestedArguments,
+                "operator %s expects nested argument, but string value(s) was given", operator);
+        }
+
+        this.operator = operator;
+        this.selector = selector;
+        this.arguments = arguments;
+    }
+
+        /**
      * @param operator  Must not be <tt>null</tt>.
      * @param selector  Must not be <tt>null</tt> or blank.
      * @param arguments Must not be <tt>null</tt> or empty. If the operator is not
      *                  {@link ComparisonOperator#isMultiValue() multiValue}, then it must contain exactly
      *                  one argument.
      * @throws IllegalArgumentException If one of the conditions specified above it not met.
+     * @deprecated Use {@link #ComparisonNode(ComparisonOperator, String, ComparisonArguments)}
      */
+    @Deprecated
     public ComparisonNode(ComparisonOperator operator, String selector, List<String> arguments) {
-        this(operator, selector, new ArrayList<>(arguments), true);
-    }
-
-    ComparisonNode(ComparisonOperator operator, String selector, List<String> arguments,
-        @SuppressWarnings("unused") boolean trusted) {
-        Assert.notNull(operator, "operator must not be null");
-        Assert.notBlank(selector, "selector must not be blank");
-        Assert.notNull(arguments, "arguments must not be null");
-        validate(operator, arguments.size());
-
-        this.operator = operator;
-        this.selector = selector;
-        this.arguments = arguments;
+        this(operator, selector, new StringArguments(arguments));
     }
 
     public <R, A> R accept(RSQLVisitor<R, A> visitor, A param) {
@@ -82,7 +96,7 @@ public final class ComparisonNode extends AbstractNode {
      * @return a copy of this node with the specified operator.
      */
     public ComparisonNode withOperator(ComparisonOperator newOperator) {
-        return new ComparisonNode(newOperator, selector, arguments, true);
+        return new ComparisonNode(newOperator, selector, arguments);
     }
 
     public String getSelector() {
@@ -98,7 +112,18 @@ public final class ComparisonNode extends AbstractNode {
     public ComparisonNode withSelector(String newSelector) {
         return selector.equals(newSelector)
         ? this
-        : new ComparisonNode(operator, newSelector, arguments, true);
+        : new ComparisonNode(operator, newSelector, arguments);
+    }
+
+    /**
+     * Return arguments. It's guaranteed that string arguments contains at least one item.
+     * When the operator is not {@link ComparisonOperator#isMultiValue() multiValue}, then it
+     * contains exactly one argument.
+     *
+     * @return the arguments.
+     */
+    public ComparisonArguments getArgumentsObject() {
+        return arguments;
     }
 
     /**
@@ -107,9 +132,23 @@ public final class ComparisonNode extends AbstractNode {
      * contains exactly one argument.
      *
      * @return a copy of the arguments list.
+     * @deprecated Use {@link #getArgumentsObject()}
      */
+    @Deprecated
     public List<String> getArguments() {
-        return new ArrayList<>(arguments);
+        return new ArrayList<>(arguments.asStringList());
+    }
+
+    /**
+     * Returns a copy of this node with the specified arguments.
+     *
+     * @param newArguments Must not be <tt>null</tt> or empty. If the operator is not
+     *                     {@link ComparisonOperator#isMultiValue() multiValue}, then it must contain exactly
+     *                     one argument.
+     * @return a copy of this node with the specified arguments.
+     */
+    public ComparisonNode withArguments(ComparisonArguments newArguments) {
+        return new ComparisonNode(operator, selector, newArguments);
     }
 
     /**
@@ -145,18 +184,11 @@ public final class ComparisonNode extends AbstractNode {
 
     @Override
     public String toString() {
-        Arity arity = operator.getArity();
-
-        final String args;
-        if (arity.max() > 1) {
-            args = join(arguments, "','", "('", "')", "()");
-        } else if (!arguments.isEmpty()) {
-            args = "'" + arguments.get(0) + "'";
+        if (operator.getType().equals(ComparisonOperator.NULLARY_TYPE)) {
+            return selector + operator;
         } else {
-            args = "";
+            return selector + operator + (arguments.asStringList().size() <= 1 && operator.getArity().max() == 1 ? arguments : "(" + arguments + ")");
         }
-
-        return selector + operator + args;
     }
 
     @Override

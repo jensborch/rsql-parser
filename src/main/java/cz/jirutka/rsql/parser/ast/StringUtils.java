@@ -23,26 +23,7 @@
  */
 package cz.jirutka.rsql.parser.ast;
 
-import java.util.List;
-import java.util.StringJoiner;
-
 abstract class StringUtils {
-
-    public static String join(List<?> list, String delimiter, String prefix, String suffix) {
-        return join(list, delimiter, prefix, suffix, null);
-    }
-
-    public static String join(List<?> list, String delimiter, String prefix, String suffix, String emptyValue) {
-        StringJoiner joiner = new StringJoiner(delimiter, prefix, suffix);
-        if (emptyValue != null) {
-            joiner.setEmptyValue(emptyValue);
-        }
-
-        for (Object s : list) {
-            joiner.add(String.valueOf(s));
-        }
-        return joiner.toString();
-    }
 
     public static boolean isBlank(String str) {
         return str == null || (indexOfNonWhitespace(str) == str.length());
