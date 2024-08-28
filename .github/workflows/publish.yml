@@ -1,0 +1,18 @@
+name: Publish
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - master
+
+jobs:
+  call-workflow:
+    if: contains(github.head_ref, 'release/') && github.event.pull_request.merged == true
+    uses: jensborch/workflows/.github/workflows/gradle-publish.yml@main
+    secrets: inherit
+    permissions:
+      contents: write
+    with:
+      java-version: 8

@@ -3,9 +3,7 @@ updates:
   - package-ecosystem: gradle
     directory: "/"
     schedule:
-      interval: daily
-      time: "08:34"
-      timezone: "Asia/Yerevan"
+      interval: "weekly"
     open-pull-requests-limit: 10
   - package-ecosystem: "github-actions"
     directory: "/"
