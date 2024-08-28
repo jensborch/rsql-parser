@@ -2,6 +2,7 @@
  * The MIT License
  *
  * Copyright 2013-2014 Jakub Jirutka <jakub@jirutka.cz>.
+ * Copyright 2024 Jens Borch Christiansen <jens.borch@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -58,4 +59,19 @@ public interface Node {
      * @return An object returned by the visitor (may be <tt>null</tt>).
      */
     <R, A> R accept(RSQLVisitor<R, A> visitor);
+
+    /**
+     * Get the current nesting level of the node.
+     *
+     * @return the nesting level
+     */
+    int getNestingLevel();
+
+    /**
+     * This is use by the JavaCC parser to set the nesting level for a node and
+     * should not been used by clients.
+     *
+     * @param nestingLevel the current nesting level
+     */
+    void setNestingLevel(int nestingLevel);
 }

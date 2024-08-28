@@ -3,6 +3,7 @@
  *
  * Copyright 2013-2016 Jakub Jirutka <jakub@jirutka.cz>.
  * Copyright 2024 Edgar Asatryan <nstdio@gmail.com>.
+ * Copyright 2024 Jens Borch Christiansen <jens.borch@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +25,7 @@
  */
 
 options {
-    LOOKAHEAD = 1;
+    LOOKAHEAD = 3;
     CHOICE_AMBIGUITY_CHECK = 3;
     OTHER_AMBIGUITY_CHECK = 2;
     STATIC = false;
@@ -50,6 +51,7 @@ import java.util.List;
 final class Parser {
 
     private NodesFactory factory;
+    private int nestingLevel = 0;
 
     public Parser(Reader reader, NodesFactory factory) {
         this(reader);
@@ -174,7 +176,7 @@ ComparisonNode Comparison():
 {
     final String sel;
     final String op;
-    final List<String> args;
+    final Object args;
 }
 {
     ( sel = Selector() op = Operator() args = Arguments() )
@@ -201,14 +203,31 @@ String Operator(): {}
     }
 }
 
-List<String> Arguments():
+Object Arguments():
 {
     final Object value;
 }
 {
-    ( <LPAREN> value = OptionalCommaSepArguments() <RPAREN> ) { return (List) value; }
+    (
+        <LPAREN>
+        {
+        nestingLevel++;
+        }
+        value = Or()
+        {
+        ((Node)value).setNestingLevel(nestingLevel);
+        }
+        <RPAREN>
+    )
+    {
+        nestingLevel--;
+        ((Node)value).setNestingLevel(nestingLevel);
+        return value;
+    }
     |
-    (value = Argument() { return Collections.singletonList((String) value); })?
+    ( <LPAREN> value = OptionalCommaSepArguments() <RPAREN> ) { return value; }
+    |
+    (value = Argument() { return value; })?
     {
       return Collections.emptyList();
     }

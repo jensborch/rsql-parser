@@ -42,7 +42,7 @@ class NodesTest extends Specification {
             'a<=1;b!=2;c>3'                  | "(a=le='1';b!='2';c=gt='3')"
             'a=gt=1,b==2;c!=3,d=lt=4'        | "(a=gt='1',(b=='2';c!='3'),d=lt='4')"
     }
-
+    
     def 'nodes should accept visitor'() {
         setup:
             def visitor = Mock(RSQLVisitor)

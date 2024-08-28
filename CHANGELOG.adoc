@@ -1,5 +1,5 @@
 = Changelog
-:repo-uri: https://github.com/jirutka/rsql-parser
+:repo-uri: https://github.com/jensborch/rsql-parser
 :issue-uri: {repo-uri}/issues
 
 == 2.3.2 (2024-05-01)

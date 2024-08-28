@@ -2,6 +2,7 @@
  * The MIT License
  *
  * Copyright 2013-2014 Jakub Jirutka <jakub@jirutka.cz>.
+ * Copyright 2024 Jens Borch Christiansen <jens.borch@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +27,8 @@ package cz.jirutka.rsql.parser.ast;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static cz.jirutka.rsql.parser.ast.StringUtils.join;
 import static java.util.Collections.unmodifiableList;
 
 /**
@@ -39,7 +40,6 @@ public abstract class LogicalNode extends AbstractNode implements Iterable<Node>
     private final List<Node> children;
 
     private final LogicalOperator operator;
-
 
     /**
      * @param operator Must not be <tt>null</tt>.
@@ -53,7 +53,6 @@ public abstract class LogicalNode extends AbstractNode implements Iterable<Node>
         this.children = unmodifiableList(new ArrayList<>(children));
     }
 
-
     /**
      * Returns a copy of this node with the specified children nodes.
      *
@@ -61,7 +60,6 @@ public abstract class LogicalNode extends AbstractNode implements Iterable<Node>
      * @return a copy of this node with the specified children nodes.
      */
     public abstract LogicalNode withChildren(List<? extends Node> children);
-
 
     /**
      * Iterate over children nodes. The underlying collection is unmodifiable!
@@ -83,10 +81,9 @@ public abstract class LogicalNode extends AbstractNode implements Iterable<Node>
         return new ArrayList<>(children);
     }
 
-
     @Override
     public String toString() {
-        return join(children, operator.toString(), "(", ")");
+        return "(" + children.stream().map(Node::toString).collect(Collectors.joining(operator.toString())) + ")";
     }
 
     @Override

@@ -67,4 +67,16 @@ public interface Arity {
     static Arity nary(int n) {
         return new NAry(n);
     }
+
+    /**
+     * Creates nullary object.
+     *
+     * @return the created arity
+     */
+    static Arity nullary() {
+        return new NullAry();
+    }
+
+
+
 }

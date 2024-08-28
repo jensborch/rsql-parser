@@ -33,7 +33,7 @@ class ComparisonNodeTest extends Specification {
 
     def 'throw exception when given multiple arguments for single-argument operator'() {
         when:
-            new ComparisonNode(operator, 'sel', ['arg1', 'arg2'])
+            new ComparisonNode(operator, 'sel', new StringArguments('arg1', 'arg2'))
         then:
             thrown IllegalArgumentException
         where:
@@ -130,12 +130,17 @@ class ComparisonNodeTest extends Specification {
         new ComparisonOperator('=c=', Arity.nary(5))  | []         | "operator '=c=' can have exactly 5 argument(s), but got 0"
         new ComparisonOperator('=d=', Arity.of(1, 5)) | []         | "operator '=d=' can have from 1 to 5 argument(s), but got 0"
         new ComparisonOperator('=e=', Arity.of(2, 6)) | ['a']      | "operator '=e=' can have from 2 to 6 argument(s), but got 1"
+        /*/node                                                                                  | expected
+        new ComparisonNode(IN, 'genres', new StringArguments('thriller', 'sci-fi', 'comedy')) | "genres=in=('thriller','sci-fi','comedy')"
+        new ComparisonNode(IN, 'genres', new StringArguments('thriller'))                     | "genres=in=('thriller')"
+        new ComparisonNode(EQUAL, 'genres', new StringArguments('thriller'))                  | "genres=='thriller'"*/
     }
 
     def 'should honor equal and hashcode contracts'() {
         expect:
         EqualsVerifier.forClass(ComparisonNode)
             .withNonnullFields('operator', 'selector', 'arguments')
+            .withIgnoredFields('nestingLevel')
             .verify()
     }
 }
