@@ -1,0 +1,14 @@
+name: Publish
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  call-workflow:
+    uses: jensborch/workflows/.github/workflows/gradle-publish.yml@main
+    secrets: inherit
+    permissions:
+      contents: write
+    with:
+      java-version: 8
