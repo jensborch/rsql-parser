@@ -58,4 +58,19 @@ public interface Node {
      * @return An object returned by the visitor (may be <tt>null</tt>).
      */
     <R, A> R accept(RSQLVisitor<R, A> visitor);
+    
+    /**
+     * Get the current nesting level of the node.
+     * 
+     * @return the nesting level
+     */
+    int getNestingLevel();
+    
+    /**
+     * This is use by the JavaCC parser to set the nesting level for a node and 
+     * should not been used by clients.
+     * 
+     * @param nestingLevel the current nesting level
+     */
+    void setNestingLevel(int nestingLevel);
 }

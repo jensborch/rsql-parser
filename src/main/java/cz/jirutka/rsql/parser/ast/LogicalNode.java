@@ -39,8 +39,7 @@ public abstract class LogicalNode extends AbstractNode implements Iterable<Node>
     private final List<Node> children;
 
     private final LogicalOperator operator;
-
-
+    
     /**
      * @param operator Must not be <tt>null</tt>.
      * @param children Children nodes, i.e. operands; must not be <tt>null</tt>.
@@ -53,7 +52,6 @@ public abstract class LogicalNode extends AbstractNode implements Iterable<Node>
         this.children = unmodifiableList(new ArrayList<>(children));
     }
 
-
     /**
      * Returns a copy of this node with the specified children nodes.
      *
@@ -61,7 +59,6 @@ public abstract class LogicalNode extends AbstractNode implements Iterable<Node>
      * @return a copy of this node with the specified children nodes.
      */
     public abstract LogicalNode withChildren(List<? extends Node> children);
-
 
     /**
      * Iterate over children nodes. The underlying collection is unmodifiable!
@@ -82,7 +79,6 @@ public abstract class LogicalNode extends AbstractNode implements Iterable<Node>
     public List<Node> getChildren() {
         return new ArrayList<>(children);
     }
-
 
     @Override
     public String toString() {

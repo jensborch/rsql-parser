@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2013-2014 Jakub Jirutka <jakub@jirutka.cz>.
+ * Copyright 2023 Jens Borch Christiansen <jens.borch@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,19 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cz.jirutka.rsql.parser;
+package cz.jirutka.rsql.parser.ast;
+
+import java.util.List;
 
 /**
- * A top level exception of RSQL parser that wraps all exceptions occurred in parsing.
+ * Interface representing arguments in the RSQL grammar.
  */
-public class RSQLParserException extends RuntimeException {
+public interface ComparisonArguments {
 
-    public RSQLParserException(Throwable cause) {
-        super(cause);
-    }
+    boolean isNested();
 
-    public RSQLParserException(String message) {
-        super(message);
-    }
-    
+    /**
+     * Returns arguments as a list of string, if {@link #isNested()} is true the
+     * list will be empty.
+     *
+     * @return a list of string arguments
+     */
+    List<String> asStringList();
+
+    /**
+     * Returns arguments as a node, if {@link #isNested()} is false this will
+     * return null.
+     *
+     * @return arguments as a node or null
+     */
+    Node asNode();
 }

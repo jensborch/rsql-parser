@@ -4,8 +4,8 @@ plugins {
   `java-library`
   `maven-publish`
   signing
-  id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
-  id("org.javacc.javacc") version "3.0.0"
+  id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
+  id("org.javacc.javacc") version "3.0.2"
   id("net.researchgate.release") version "3.0.2"
 }
 
@@ -16,17 +16,17 @@ repositories {
 dependencies {
   compileOnly("net.jcip:jcip-annotations:1.0")
 
-  testImplementation("nl.jqno.equalsverifier:equalsverifier:3.15.3")
+  testImplementation("nl.jqno.equalsverifier:equalsverifier:3.16.1")
 
-  testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
+  testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.3")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.3")
 
-  testImplementation("org.spockframework:spock-core:2.4-M1-groovy-4.0")
+  testImplementation("org.spockframework:spock-core:2.4-M4-groovy-4.0")
 
   javacc("net.java.dev.javacc:javacc:7.0.13")
 }
 
-group = "io.github.nstdio"
+group = "com.github.jensborch"
 description = "RSQL-parser"
 
 java {
@@ -51,7 +51,7 @@ publishing {
     pom {
       name.set("RSQL-parser")
       description.set("Parser of RSQL / FIQL (query language for RESTful APIs) written in JavaCC.")
-      url.set("https://github.com/nstdio/rsql-parser")
+      url.set("https://github.com/jensborch/rsql-parser")
       inceptionYear.set("2011")
 
       licenses {
@@ -73,22 +73,27 @@ publishing {
           name.set("Edgar Asatryan")
           email.set("nstdio@gmail.com")
         }
+        developer {
+          id.set("jensborch")
+          name.set("Jens Borch Christiansen")
+          email.set("jens.borch@gmail.com")
+        }
       }
 
       scm {
-        connection.set("scm:git:git@github.com:nstdio/rsql-parser.git")
-        developerConnection.set("scm:git:git@github.com:nstdio/rsql-parser.git")
-        url.set("https://github.com/nstdio/rsql-parser")
+        connection.set("scm:git:git@github.com:jensborch/rsql-parser.git")
+        developerConnection.set("scm:git:git@github.com:jensborch/rsql-parser.git")
+        url.set("https://github.com/jensborch/rsql-parser")
       }
 
       ciManagement {
         system.set("GitHub Actions")
-        url.set("https://github.com/nstdio/rsql-parser/actions")
+        url.set("https://github.com/jensborch/rsql-parser/actions")
       }
 
       issueManagement {
         system.set("GitHub Issues")
-        url.set("https://github.com/nstdio/rsql-parser/issues")
+        url.set("https://github.com/jensborch/rsql-parser/issues")
       }
     }
   }
@@ -107,7 +112,7 @@ signing {
 nexusPublishing {
   repositories {
     sonatype {
-      val baseUri = uri("https://s01.oss.sonatype.org")
+      val baseUri = uri("https://oss.sonatype.org")
       nexusUrl.set(baseUri.resolve("/service/local/"))
       snapshotRepositoryUrl.set(baseUri.resolve("/content/repositories/snapshots/"))
     }
@@ -121,6 +126,8 @@ release {
     pushToRemote.set("origin")
   }
 }
+
+
 
 tasks {
   test {
@@ -164,3 +171,4 @@ tasks {
     dependsOn("publishToSonatype", "closeAndReleaseSonatypeStagingRepository")
   }
 }
+

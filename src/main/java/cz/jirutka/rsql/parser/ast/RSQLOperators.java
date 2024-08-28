@@ -37,8 +37,8 @@ public abstract class RSQLOperators {
             GREATER_THAN_OR_EQUAL = new ComparisonOperator("=ge=", ">="),
             LESS_THAN = new ComparisonOperator("=lt=", "<"),
             LESS_THAN_OR_EQUAL = new ComparisonOperator("=le=", "<="),
-            IN = new ComparisonOperator("=in=", true),
-            NOT_IN = new ComparisonOperator("=out=", true);
+            IN = new ComparisonOperator("=in=", ComparisonOperator.Type.MULTI_VALUED),
+            NOT_IN = new ComparisonOperator("=out=", ComparisonOperator.Type.MULTI_VALUED);
 
 
     public static Set<ComparisonOperator> defaultOperators() {
