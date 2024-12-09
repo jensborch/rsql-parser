@@ -15,7 +15,7 @@ repositories {
 dependencies {
   compileOnly("net.jcip:jcip-annotations:1.0")
 
-  testImplementation("nl.jqno.equalsverifier:equalsverifier:3.17.4")
+  testImplementation("nl.jqno.equalsverifier:equalsverifier:3.17.5")
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.3")
